@@ -32,7 +32,24 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  const req = event.request;
+  // صفحة index.html: جرّبي الشبكة أولاً دائماً، حتى يظهر كل تحديث فوراً
+  // عند توفّر الإنترنت، ولا يبقى هاتفكِ عالقاً على نسخة قديمة إلى الأبد.
+  // إن تعذّرت الشبكة (بلا إنترنت)، استعملي النسخة المخزَّنة كخطة بديلة.
+  const isPageRequest = req.mode === "navigate" || req.url.endsWith("/") || req.url.endsWith("index.html");
+  if (isPageRequest) {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, res.clone()));
+          return res;
+        })
+        .catch(() => caches.match(req))
+    );
+    return;
+  }
+  // بقية الملفات (الأيقونات، manifest): كاش أولاً، فهي نادراً ما تتغيّر
   event.respondWith(
-    caches.match(event.request).then((cached) => cached || fetch(event.request))
+    caches.match(req).then((cached) => cached || fetch(req))
   );
 });
