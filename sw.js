@@ -11,7 +11,8 @@ const ASSETS = [
   "./index.html",
   "./manifest.json",
   "./icon-192.svg",
-  "./icon-512.svg"
+  "./icon-512.svg",
+  "./laundry.html"
 ];
 
 self.addEventListener("install", (event) => {

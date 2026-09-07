@@ -9,7 +9,7 @@
   ارفعي هذا الرقم عند كل تحديث تنشرينه — هذا وحده يكفي ليأخذ هاتفكِ
   النسخة الجديدة (يُستعمل في اسم كاش الـ service worker في sw.js).
 -->
-<script>const VERSION='1.1.1';</script>
+<script>const VERSION='1.1.3';</script>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-512.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.svg">
@@ -62,6 +62,12 @@
   .sphere-name{font-size:16px; font-weight:700; display:flex; align-items:center; gap:6px;}
   .sphere-check{font-size:15px;}
   .sphere-goals{margin-top:12px; padding-top:8px; border-top:1px solid var(--line);}
+  .kin-card.due{border-color:#3A6B86;}
+  .kin-item{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:10px;}
+  .kin-title{font-size:14px; color:var(--ink);}
+  .kin-kids-item{flex-direction:column; align-items:stretch; gap:8px;}
+  .kin-count{font-size:12px; color:var(--soft);}
+  .kin-next{font-size:13px; color:var(--soft); margin-top:6px;}
   .today-summary{text-align:center; color:var(--soft); font-size:13px; margin:4px 0 14px;}
   .toggle-row{display:flex; gap:8px; justify-content:center; margin-bottom:14px;}
 
@@ -71,6 +77,17 @@
     color:var(--ink); border-radius:12px; padding:10px 14px; font-size:14px;
     text-align:center; margin-bottom:12px;
   }
+  .weekly-banner{
+    background:rgba(58,107,134,.15); border:1px solid rgba(58,107,134,.4);
+    color:#3A6B86; font-weight:700; cursor:pointer;
+  }
+  /* شاشة أسبوعي */
+  .weekly-time-row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:8px 2px; border-bottom:1px solid var(--line);}
+  .weekly-time-row:last-child{border-bottom:0;}
+  .weekly-time-name{font-size:14px; flex:1;}
+  .weekly-summary{background:rgba(76,107,82,.1); border:1px solid rgba(76,107,82,.3); font-size:15px; line-height:1.9;}
+  .weekly-summary-note{margin-top:8px; font-size:13px; color:var(--soft);}
+  .weekly-export-btn{width:100%; margin:4px 0 20px; padding:15px; font-size:16px;}
 
   /* أهداف اليوم */
   .goal{padding:11px 4px; border-bottom:1px solid var(--line);}
@@ -110,6 +127,22 @@
     border-radius:50%; background:var(--amber);
   }
   .prayer-time{display:flex; align-items:center; gap:8px; direction:ltr;}
+  .prayer-mini-row{display:flex; gap:6px; margin:4px 0 14px;}
+  .prayer-mini{
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:2px; border-radius:10px; border:1px solid var(--line); background:#fff;
+    padding:8px 2px; cursor:pointer; transition:.15s;
+  }
+  .prayer-mini-name{font-size:11px; color:var(--soft);}
+  .prayer-mini-mark{font-size:15px; font-weight:700; min-height:17px; color:var(--ink);}
+  .prayer-mini.ontime{background:var(--moss); border-color:var(--moss);}
+  .prayer-mini.late{background:var(--amber); border-color:var(--amber);}
+  .prayer-mini.missed{background:var(--plum); border-color:var(--plum);}
+  .prayer-mini.ontime .prayer-mini-name, .prayer-mini.ontime .prayer-mini-mark,
+  .prayer-mini.late .prayer-mini-name, .prayer-mini.late .prayer-mini-mark,
+  .prayer-mini.missed .prayer-mini-name, .prayer-mini.missed .prayer-mini-mark{color:#fff;}
+  .prayer-mini.not-due{opacity:.4; cursor:default;}
+  .prayer-mini.needs-alert{border-width:2px; border-color:rgba(184,134,47,.6);}
   .prayer-adjust-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:6px;}
   .prayer-adjust-item{display:flex; align-items:center; justify-content:space-between; gap:6px;
     background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:6px 10px;}
@@ -149,6 +182,8 @@
   .btn.ghost{background:#fff; color:var(--plum); border:1px solid var(--plum);}
   .btn.moss{background:var(--moss);}
   .btn.small{padding:7px 12px; font-size:13px;}
+  .guide-link{display:block; width:100%; text-align:center; margin-bottom:8px; box-sizing:border-box; text-decoration:none;}
+  .guide-link:last-child{margin-bottom:0;}
   .row{display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;}
   .row > *{flex:1;}
   .row .grow0{flex:0 0 auto;}
@@ -245,6 +280,35 @@
   .kg-list{margin-top:4px;}
   .kg-item{display:flex; align-items:center; gap:10px; padding:8px 2px; border-bottom:1px solid var(--line);}
   .kg-item:last-child{border-bottom:0;}
+  /* تبويب ليلتي */
+  .night-top{padding-bottom:14px;}
+  .night-count{font-size:13px; color:var(--soft); margin-bottom:8px;}
+  .night-bar{height:3px; border-radius:99px; background:var(--line); overflow:hidden;}
+  .night-bar span{display:block; height:100%; background:var(--moss); transition:width .3s;}
+  .night-h{font-size:12px; color:var(--soft); margin-bottom:8px;}
+  .night-close{width:100%; margin:4px 0 20px; padding:15px; font-size:16px;}
+  .night-farewell{text-align:center; padding:40px 20px; font-size:19px; color:var(--moss);}
+  .night-veil{text-align:center; padding:36px 20px; font-size:16px; color:var(--soft);}
+  .night-veil.reveal{color:var(--moss);}
+
+  /* شاشة مراقبة المسؤوليات */
+  .resp-times{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;}
+  .resp-times select{width:100%;}
+  .resp-table{width:100%;}
+  .resp-row{display:grid; grid-template-columns:minmax(42px,1fr) repeat(5,1fr); gap:5px; align-items:center; margin-bottom:5px;}
+  .resp-head{margin-bottom:7px;}
+  .resp-th{font-size:9.5px; line-height:1.2; color:var(--soft); text-align:center; font-style:italic;}
+  .resp-name{font-size:12px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .resp-cell{
+    aspect-ratio:1; width:100%; border-radius:7px;
+    border:1.5px solid var(--line); background:#fff; cursor:pointer; transition:.12s;
+  }
+  .resp-legend{display:flex; flex-wrap:wrap; gap:12px; margin-top:12px; font-size:12px; color:var(--soft);}
+  .resp-legend-item{display:flex; align-items:center; gap:5px;}
+  .resp-swatch{width:11px; height:11px; border-radius:3px; display:inline-block;}
+  .kin-manage-row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 2px; border-bottom:1px solid var(--line);}
+  .kin-manage-row:last-child{border-bottom:0;}
+  .kin-form{background:var(--bg); border-radius:12px; padding:12px; margin-top:10px;}
   .kg-item .kg-chk{
     width:22px; height:22px; border-radius:7px; border:2px solid var(--line);
     flex:0 0 auto; display:flex; align-items:center; justify-content:center;
@@ -276,6 +340,17 @@
   .pattern-line{font-size:14px; padding:6px 2px; border-bottom:1px solid var(--line);}
   .pattern-line:last-child{border-bottom:0;}
   .pattern-link{margin-top:10px; padding:10px 12px; background:var(--bg); border-radius:10px; font-size:14px; color:var(--ink);}
+  .prayer-stat-row{padding:9px 2px; border-bottom:1px solid var(--line);}
+  .prayer-stat-row:last-child{border-bottom:0;}
+  .prayer-stat-label{font-weight:700; font-size:14px;}
+  .prayer-stat-nums{font-size:12px; color:var(--soft); margin:2px 0 6px;}
+  .prayer-stat-bar{display:flex; height:8px; border-radius:99px; overflow:hidden; background:var(--line);}
+  .prayer-stat-bar span{height:100%;}
+  .resp-stat-row{padding:8px 2px; border-bottom:1px solid var(--line); font-size:13px; color:var(--soft);}
+  .resp-stat-name{font-weight:700; color:var(--ink);}
+  .resp-cleanup-line{color:#7A4A63; margin-top:10px;}
+  .kin-stat-row{padding:8px 2px; border-bottom:1px solid var(--line); font-size:14px;}
+  .kin-stat-row:last-child{border-bottom:0;}
   .log-item{padding:10px 4px; border-bottom:1px solid var(--line);}
   .log-item:last-child{border-bottom:0;}
   .log-date{font-weight:700; font-size:14px;}
@@ -317,11 +392,11 @@
     display:flex; padding:6px 4px 10px; padding-bottom:calc(10px + env(safe-area-inset-bottom));
   }
   nav.tabs button{
-    flex:1; background:none; border:0; color:var(--soft);
-    font-size:12px; font-weight:700; display:flex; flex-direction:column;
-    align-items:center; gap:3px; padding:4px 0;
+    flex:1; min-width:0; background:none; border:0; color:var(--soft);
+    font-size:11px; font-weight:700; display:flex; flex-direction:column;
+    align-items:center; gap:3px; padding:4px 0; white-space:nowrap;
   }
-  nav.tabs button .ic{font-size:20px; line-height:1;}
+  nav.tabs button .ic{font-size:19px; line-height:1;}
   nav.tabs button.active{color:var(--plum);}
 </style>
 </head>
@@ -334,6 +409,7 @@
 <main id="view"></main>
 
 <nav class="tabs" id="tabs">
+  <button data-tab="night"><span class="ic">🌙</span>ليلتي</button>
   <button data-tab="today"><span class="ic">📿</span>اليوم</button>
   <button data-tab="body"><span class="ic">🍎</span>جسدي</button>
   <button data-tab="kids"><span class="ic">🧒</span>أولادي</button>
@@ -344,14 +420,32 @@
 <script>
 "use strict";
 /* ============ الثوابت ============ */
+/* أدلّة للقراءة فقط (ملفات HTML مستقلة داخل مجلد المشروع) — أضيفي عليها لاحقاً بنفس الشكل */
+const GUIDES=[{title:'دليل الغسيل', file:'laundry.html'}];
 const KIDS = ["أحمد","إبراهيم","سهى","سلمى","سارة"];
+/* شاشة مراقبة المسؤوليات — مراقبة فقط، بلا قواعد ولا تنبيهات */
+const RESP_KIDS_DEFAULT = ["أحمد","إبراهيم","سهى","سلمى"];
+const RESPONSIBILITIES = [
+  {id:"bag",    label:"الحقيبة",       short:"الحقيبة"},
+  {id:"lunch",  label:"علبة الطعام",   short:"علبة الطعام"},
+  {id:"wake",   label:"الاستيقاظ للمدرسة", short:"الاستيقاظ"},
+  {id:"sleep",  label:"النوم في موعده",    short:"النوم"},
+  {id:"tidy",   label:"ترتيب ما عبث به",   short:"الترتيب"}
+];
+const RESP_STATES = [
+  {id:"alone",    label:"وحده",    color:"#4C6B52"},
+  {id:"reminded", label:"بتذكير",  color:"#B8862F"},
+  {id:"not",      label:"لم يفعل", color:"#7A4A63"}
+];
+const RESP_TIMES = ["15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00"];
+const CLEANUP_OPTIONS = [0,10,20,30,45,60,90];
 const WD_AR = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
 const DAY_SHORT = ["ح","ن","ث","ر","خ","ج","س"]; // مفهرسة حسب getDay: الأحد..السبت
 const ALL_DAYS = [0,1,2,3,4,5,6];
-const CAT_ORDER = ["المرتكز","روحي","جسدي","كأم","كزوجة","صِلة الرحم"];
+const CAT_ORDER = ["المرتكز","روحي","جسدي","كأم","كزوجة"];
 const CAT_ICON = {
   "المرتكز":"🌅","روحي":"📖","جسدي":"💪",
-  "كأم":"🤍","كزوجة":"☕","صِلة الرحم":"📞"
+  "كأم":"🤍","كزوجة":"☕"
 };
 
 /* أسباب عدم إنجاز هدف (متعدّدة الاختيار) */
@@ -373,7 +467,6 @@ const AUTHORITY_WHO = [...KIDS, "الجميع"];
 /* الأهداف الافتراضية المفعّلة */
 const DEFAULT_GOALS = [
   ["مراجعة أهدافي","المرتكز",ALL_DAYS],
-  ["الصلوات في وقتها","روحي",ALL_DAYS],
   ["وِردي من القرآن","روحي",ALL_DAYS],
   ["أذكار الصباح والمساء","روحي",ALL_DAYS],
   ["الرياضة","جسدي",[6,1,3]],                 // السبت، الاثنين، الأربعاء
@@ -384,8 +477,6 @@ const DEFAULT_GOALS = [
   ["جلسة أحمد","كأم",[5]],                     // الجمعة
   ["وقت هادئ مع زوجي","كزوجة",ALL_DAYS],
   ["كلمة امتنان لزوجي","كزوجة",ALL_DAYS],
-  ["الاتصال بالجدّة والخال","صِلة الرحم",[5]],  // الجمعة
-  ["تفقّد الأهل","صِلة الرحم",ALL_DAYS],
 ];
 
 /* بنك الأهداف الجاهز (إضافات غير مفعّلة افتراضياً) */
@@ -407,9 +498,6 @@ const BANK = [
   {name:"موعد أسبوعي مع زوجي",category:"كزوجة",days:[4]},
   {name:"رسالة حب",category:"كزوجة",days:ALL_DAYS},
   {name:"تحضير شيء يحبه",category:"كزوجة",days:ALL_DAYS},
-  {name:"زيارة قريب",category:"صِلة الرحم",days:[5]},
-  {name:"اتصال بصديقة",category:"صِلة الرحم",days:ALL_DAYS},
-  {name:"دعاء للأهل",category:"صِلة الرحم",days:ALL_DAYS},
 ];
 
 /* مكتبة الطعام الجاهزة — [الاسم, البروتين بالغرام, السعرات] */
@@ -608,6 +696,97 @@ function weekReviewFilled(weekKey){
   });
 }
 
+/* صلة الرحم — نظام بإيقاع أسبوعي/شهري مستقل عن الأهداف اليومية */
+const KIN_KEY = "mt_kin";
+const KIN_MSG_DEFAULT_KIDS = ["أحمد","إبراهيم","سهى","سلمى"];
+const KIN_SEED = [
+  { id:"grandma", title:"مكالمة مرئية مع جدّتي", cycle:"monthly", last:null, history:[] },
+  { id:"kids-msg", title:"رسالة من الأولاد لجدّتهم", cycle:"weekly", day:5, last:null, kids:{}, extraKids:[], history:[] },
+  { id:"mom", title:"الاتصال بأمي", cycle:"weekly", day:0, last:null, history:[] },
+  { id:"sister", title:"الاطمئنان على أختي", cycle:"weekly", day:1, last:null, history:[] },
+  { id:"brother", title:"الاطمئنان على أخي", cycle:"weekly", day:3, last:null, history:[] }
+];
+function loadKin(){
+  let list;
+  try{ const raw=localStorage.getItem(KIN_KEY); list = raw?JSON.parse(raw):null; }
+  catch(e){ console.warn(e); list=null; }
+  if(!list){ list=JSON.parse(JSON.stringify(KIN_SEED)); saveKin(list); }
+  list.forEach(it=>{
+    it.history = it.history||[];
+    if(it.id==="kids-msg"){ it.kids=it.kids||{}; it.extraKids=it.extraKids||[]; }
+  });
+  return list;
+}
+function saveKin(list){ try{ localStorage.setItem(KIN_KEY, JSON.stringify(list)); }catch(e){ console.warn(e); } }
+function daysBetween(keyA, keyB){
+  return Math.round((new Date(keyB+"T00:00:00") - new Date(keyA+"T00:00:00"))/86400000);
+}
+function kinIsDue(item, todayKeyStr, todayWd){
+  if(item.cycle==="monthly"){
+    if(!item.last) return true;
+    return daysBetween(item.last, todayKeyStr)>=30;
+  }
+  if(todayWd!==item.day) return false;
+  if(item.id==="kids-msg") return true; // يبقى ظاهراً طوال يومه بصرف النظر عمّن أرسل فعلاً
+  if(!item.last) return true;
+  return item.last < weekStartKey(new Date());
+}
+function kinDaysUntilDue(item, todayKeyStr, todayWd){
+  if(item.cycle==="monthly"){
+    if(!item.last) return 0;
+    return Math.max(0, 30-daysBetween(item.last, todayKeyStr));
+  }
+  let diff=(item.day-todayWd+7)%7;
+  if(diff===0) diff=7; // اليوم هو يومه لكنه أُنجز هذا الأسبوع بالفعل
+  return diff;
+}
+
+/* ============ الطقس الأسبوعي: مواعيد المنبّهات ============
+   mt_times: خريطة معرّف ← وقت. مفاتيح الأهداف كما هي، وبنود صلة الرحم بسابقة "kin:" */
+const TIMES_KEY = "mt_times";
+function loadTimes(){
+  try{ const raw=localStorage.getItem(TIMES_KEY); if(raw) return JSON.parse(raw); }
+  catch(e){ console.warn(e); }
+  return {};
+}
+function saveTimes(t){ try{ localStorage.setItem(TIMES_KEY, JSON.stringify(t)); }catch(e){ console.warn(e); } }
+/* قائمة أوقات كل ١٥ دقيقة */
+const QUARTER_TIMES = (()=>{
+  const out=[];
+  for(let h=0; h<24; h++) for(let m=0; m<60; m+=15) out.push(String(h).padStart(2,"0")+":"+String(m).padStart(2,"0"));
+  return out;
+})();
+const PRAYER_TEXT_DEFAULT = "حان وقت صلاة {الصلاة} — اتركي ما بيدكِ";
+function weeklySettings(){
+  state.settings = state.settings||{};
+  const w = state.settings.weekly = state.settings.weekly||{};
+  if(w.prayerExport===undefined) w.prayerExport=true;
+  if(w.prayerBefore===undefined) w.prayerBefore=5;
+  if(w.prayerText===undefined) w.prayerText=PRAYER_TEXT_DEFAULT;
+  if(w.lastExport===undefined) w.lastExport=null;
+  return w;
+}
+/* هل أُنجزت خطة هذا الأسبوع؟ (صُدِّرت منبّهاته) */
+function weekPlanDone(){
+  const w=weeklySettings();
+  return !!w.lastExport && w.lastExport >= weekStartKey(new Date());
+}
+/* هل يحتاج بند صلة الرحم لموعد تذكير هذا الأسبوع؟ (تخطيط مسبق، بصرف النظر عن يومه بالضبط) */
+function kinNeedsPlanning(item){
+  const todayKeyStr=todayKey(), todayWd=new Date().getDay();
+  if(item.cycle==="monthly"){
+    return kinIsDue(item, todayKeyStr, todayWd) || kinDaysUntilDue(item, todayKeyStr, todayWd)<=7;
+  }
+  return !item.last || item.last < weekStartKey(new Date());
+}
+function lastExportLabel(w){
+  if(!w.lastExport) return "لم يُصدَّر بعد.";
+  const wd=WD_AR[weekdayOf(w.lastExport)];
+  const daysAgo=daysBetween(w.lastExport, todayKey());
+  const rel = daysAgo<=0 ? "اليوم" : daysAgo===1 ? "أمس" : `قبل ${daysAgo} أيام`;
+  return `آخر تصدير: ${wd} ${rel}`;
+}
+
 /* ============ حساب أوقات الصلاة فلكياً (بلا إنترنت) ============
    الخطوات: اليوم اليولياني ← موقع الشمس (الميل ومعادلة الزمن) ←
    زاوية الساعة لكل صلاة ← التحويل للتوقيت المحلي ← تصحيح خطوط العرض العالية. */
@@ -731,9 +910,28 @@ function getPrayerSchedule(dateObj){
   }
   return PRAYER_ORDER.map(k=>({key:k, label:PRAYER_LABELS[k], hours:raw[k]}));
 }
-function findPrayerGoalId(){
-  const g=state.goals.find(x=>x.name==="الصلوات في وقتها");
-  return g?g.id:null;
+
+const PRAYER_STATUS_MARK = {ontime:"✓", late:"~", missed:"✕"};
+/* صفّ أفقي مضغوط للصلوات الخمس داخل صعيد رامة */
+/* allOpen: في شاشة «ليلتي» كل الصلوات قابلة للضغط وبلا إطار تنبيه — الليل مضى عليها كلها */
+function buildPrayerMiniRow(day, todaySchedule, nowH, allOpen){
+  const boxes = PRAYER_ORDER.map(key=>{
+    const p = todaySchedule.find(x=>x.key===key);
+    const hours = p ? p.hours : NaN;
+    const isDue = allOpen || (!isNaN(hours) && hours<=nowH);
+    const status = day.prayerStatus[key];
+    const needsAlert = !allOpen && isDue && !status;
+    let cls = "prayer-mini";
+    if(!isDue) cls += " not-due";
+    else if(status) cls += " "+status;
+    if(needsAlert) cls += " needs-alert";
+    const clickAttr = isDue ? ` data-action="prayerStatusCycle" data-key="${key}"` : "";
+    return `<div class="${cls}"${clickAttr}>
+      <div class="prayer-mini-name">${PRAYER_LABELS[key]}</div>
+      <div class="prayer-mini-mark">${status?PRAYER_STATUS_MARK[status]:""}</div>
+    </div>`;
+  }).join("");
+  return `<div class="prayer-mini-row">${boxes}</div>`;
 }
 
 /* ============ تصدير تذكيرات الأهداف كملف .ics للتقويم ============ */
@@ -793,12 +991,19 @@ function buildICS(entries){
   const dtstamp=icsUTCTimestamp(new Date());
   const lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Mutabaati//Goals Reminders//AR","CALSCALE:GREGORIAN","METHOD:PUBLISH"];
   entries.forEach(ent=>{
-    if(!ent.days || !ent.days.length) return;
     const [hh,mm]=ent.time.split(":").map(Number);
-    const anchor=earliestUpcomingDate(ent.days, hh, mm);
-    if(!anchor) return;
+    let anchor, rrule;
+    if(ent.cycle==="monthly"){
+      anchor=new Date(); anchor.setHours(hh,mm,0,0);
+      if(anchor<=new Date()) anchor.setDate(anchor.getDate()+1);
+      rrule="RRULE:FREQ=MONTHLY";
+    }else{
+      if(!ent.days || !ent.days.length) return;
+      anchor=earliestUpcomingDate(ent.days, hh, mm);
+      if(!anchor) return;
+      rrule="RRULE:FREQ=WEEKLY;BYDAY="+ent.days.map(d=>ICS_DAY_CODES[d]).join(",");
+    }
     const dtEndDate=new Date(anchor.getTime()+15*60000);
-    const byday=ent.days.map(d=>ICS_DAY_CODES[d]).join(",");
     const uid=`mutabaati-${stableHash(ent.name)}@mutabaati.local`;
 
     lines.push(icsFoldLine("BEGIN:VEVENT"));
@@ -806,7 +1011,7 @@ function buildICS(entries){
     lines.push(icsFoldLine("DTSTAMP:"+dtstamp));
     lines.push(icsFoldLine("DTSTART:"+icsLocalTimestamp(anchor)));
     lines.push(icsFoldLine("DTEND:"+icsLocalTimestamp(dtEndDate)));
-    lines.push(icsFoldLine("RRULE:FREQ=WEEKLY;BYDAY="+byday));
+    lines.push(icsFoldLine(rrule));
     lines.push(icsFoldLine("SUMMARY:"+icsEscape(ent.name)));
     lines.push("BEGIN:VALARM");
     lines.push("ACTION:DISPLAY");
@@ -818,13 +1023,105 @@ function buildICS(entries){
   lines.push("END:VCALENDAR");
   return lines.join("\r\n");
 }
-function downloadICS(content){
+function downloadICS(content, filename){
   const blob=new Blob([content], {type:"text/calendar;charset=utf-8"});
   const url=URL.createObjectURL(blob);
   const a=document.createElement("a");
-  a.href=url; a.download="mutabaati-goals.ics";
+  a.href=url; a.download=filename||"mutabaati-goals.ics";
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+/* ============ طقس أسبوعي: ملف .ics واحد بأحداث مؤرَّخة (بلا RRULE) ============ */
+function addDays(dateObj, n){ const d=new Date(dateObj); d.setDate(d.getDate()+n); return d; }
+/* حدث واحد مؤرَّخ (لا يتكرّر) — يُستعمل لكل أحداث الطقس الأسبوعي */
+function icsSingleEvent(uid, dtstamp, start, durationMin, summary, description, alarmMin){
+  const end=new Date(start.getTime()+durationMin*60000);
+  const lines=[];
+  lines.push(icsFoldLine("BEGIN:VEVENT"));
+  lines.push(icsFoldLine("UID:"+uid));
+  lines.push(icsFoldLine("DTSTAMP:"+dtstamp));
+  lines.push(icsFoldLine("DTSTART:"+icsLocalTimestamp(start)));
+  lines.push(icsFoldLine("DTEND:"+icsLocalTimestamp(end)));
+  lines.push(icsFoldLine("SUMMARY:"+icsEscape(summary)));
+  lines.push(icsFoldLine("DESCRIPTION:"+icsEscape(description||summary)));
+  lines.push(icsFoldLine("CATEGORIES:"+icsEscape("متابعتي")));
+  lines.push("BEGIN:VALARM");
+  lines.push("ACTION:DISPLAY");
+  lines.push(icsFoldLine("DESCRIPTION:"+icsEscape(description||summary)));
+  lines.push("TRIGGER:-PT"+Math.max(0,+alarmMin||0)+"M");
+  lines.push("END:VALARM");
+  lines.push("END:VEVENT");
+  return lines;
+}
+/* يبني ملف .ics الكامل لطقس الأسبوع، ويُرجع أيضاً عدد كل نوع للملخّص بعد التصدير */
+function buildWeeklyRitualICS(){
+  const w=weeklySettings();
+  const times=loadTimes();
+  const dtstamp=icsUTCTimestamp(new Date());
+  const lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Mutabaati//Weekly Ritual//AR","CALSCALE:GREGORIAN","METHOD:PUBLISH"];
+  let prayerCount=0, goalCount=0, kinCount=0;
+  const today=new Date(); today.setHours(0,0,0,0);
+
+  // أ. الصلوات — أوقات فعلية كل يوم من السبعة القادمة، بلا تكرار
+  if(w.prayerExport){
+    for(let i=0;i<7;i++){
+      const dateObj=addDays(today,i);
+      const dateKeyStr=fmt(dateObj);
+      getPrayerSchedule(dateObj).forEach(p=>{
+        if(p.hours==null || isNaN(p.hours)) return;
+        const start=new Date(dateObj);
+        const hh=Math.floor(p.hours), mm=Math.round((p.hours-hh)*60);
+        start.setHours(hh,mm,0,0);
+        const desc=w.prayerText.replace("{الصلاة}", p.label);
+        const uid=`mutabaati-prayer-${dateKeyStr}-${p.key}@mutabaati.local`;
+        lines.push(...icsSingleEvent(uid, dtstamp, start, 15, p.label, desc, w.prayerBefore));
+        prayerCount++;
+      });
+    }
+  }
+
+  // ب. الأهداف الشغّالة ذات موعد محفوظ، في أيامها خلال الأسبوع القادم فقط
+  state.goals.filter(g=>g.active).forEach(g=>{
+    const t=times[g.id]; if(!t) return;
+    const [hh,mm]=t.split(":").map(Number);
+    for(let i=0;i<7;i++){
+      const dateObj=addDays(today,i);
+      if(!g.days.includes(dateObj.getDay())) continue;
+      const start=new Date(dateObj); start.setHours(hh,mm,0,0);
+      const dateKeyStr=fmt(dateObj);
+      const uid=`mutabaati-goal-${dateKeyStr}-${stableHash(g.name)}@mutabaati.local`;
+      lines.push(...icsSingleEvent(uid, dtstamp, start, 15, g.name, g.name, 5));
+      goalCount++;
+    }
+  });
+
+  // ج. صلة الرحم — بنود مستحقّة هذا الأسبوع/الشهر ذات موعد محفوظ
+  loadKin().filter(kinNeedsPlanning).forEach(item=>{
+    const t=times["kin:"+item.id]; if(!t) return;
+    const [hh,mm]=t.split(":").map(Number);
+    let dateObj;
+    if(item.cycle==="monthly"){
+      dateObj=addDays(today, kinDaysUntilDue(item, todayKey(), today.getDay()));
+    }else{
+      dateObj=addDays(today, (item.day-today.getDay()+7)%7);
+    }
+    const start=new Date(dateObj); start.setHours(hh,mm,0,0);
+    const dateKeyStr=fmt(dateObj);
+    const desc="حان وقت صلة الرحم — "+item.title;
+    const uid=`mutabaati-kin-${dateKeyStr}-${stableHash(item.title)}@mutabaati.local`;
+    lines.push(...icsSingleEvent(uid, dtstamp, start, 15, item.title, desc, 5));
+    kinCount++;
+  });
+
+  // د. حدث ثابت: الأحد القادم ٢٠:٣٠ — يضمن استمرار الطقس
+  const nextSunday=addDays(today, (7-today.getDay())%7 || 7);
+  nextSunday.setHours(20,30,0,0);
+  const ritualUid=`mutabaati-ritual-${fmt(nextSunday)}@mutabaati.local`;
+  lines.push(...icsSingleEvent(ritualUid, dtstamp, nextSunday, 15, "رتّبي أسبوعكِ", "رتّبي أسبوعكِ", 5));
+
+  lines.push("END:VCALENDAR");
+  return {ics: lines.join("\r\n"), prayerCount, goalCount, kinCount};
 }
 
 /* ============ الحالة والتخزين ============ */
@@ -857,7 +1154,7 @@ function freshState(){
     calorieTarget:1900,
     goals: BANK.map(b=>({id:genId(), name:b.name, category:b.category, days:b.days.slice(), active:defaultNames.has(b.name)})),
     days:{},
-    settings:{},
+    settings:{hideResults:true}, // مفعّل افتراضياً للمستخدمة الجديدة أيضاً
     prayer: freshPrayerSettings()
   };
 }
@@ -866,6 +1163,10 @@ function migrate(s){
   s.proteinTarget = s.proteinTarget||100;
   s.calorieTarget = s.calorieTarget||1900;
   s.goals = s.goals||[];
+  // حذف هدف الصلاة القديم — استُبدل بخمسة صلوات مستقلة داخل صعيد رامة
+  s.goals = s.goals.filter(g=>g.name!=="الصلوات في وقتها");
+  // حذف أهداف صلة الرحم القديمة — استُبدلت بنظام إيقاع خاص (mt_kin)
+  s.goals = s.goals.filter(g=>g.category!=="صِلة الرحم");
   const freshPrayer=freshPrayerSettings();
   s.prayer = s.prayer||freshPrayer;
   s.prayer.lat = s.prayer.lat!=null? s.prayer.lat : freshPrayer.lat;
@@ -884,6 +1185,7 @@ function migrate(s){
   });
   s.days = s.days||{};
   s.settings = s.settings||{};
+  if(s.settings.hideResults===undefined) s.settings.hideResults=true; // مفعّل افتراضياً
   Object.values(s.days).forEach(d=>{
     if(!d) return;
     if(d.meals){
@@ -902,7 +1204,11 @@ function migrate(s){
   });
   return s;
 }
-function save(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){ console.warn(e); } }
+function save(){
+  // أي تسجيل يتمّ وشاشة «ليلتي» مفتوحة يُعلّم هذه الليلة كليلة مسجّلة
+  if(currentTab==="night"){ const d=state.days&&state.days[todayKey()]; if(d) d.night=true; }
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){ console.warn(e); }
+}
 
 /* ============ أدوات التاريخ ============ */
 function fmt(d){
@@ -940,6 +1246,11 @@ function getDay(key){
   d.detail = d.detail||{};
   d.home = d.home||{group:false, threat:false, threatWhat:"", kept:null, whyNot:""};
   d.home.authority = d.home.authority||{happened:false, kinds:[], who:[], what:"", repair:""};
+  if(d.home.bagDue===undefined) d.home.bagDue="18:00";
+  if(d.home.bagDone===undefined) d.home.bagDone="";
+  if(d.home.myCleanup===undefined) d.home.myCleanup=null;
+  d.prayerStatus = d.prayerStatus||{fajr:null, dhuhr:null, asr:null, maghrib:null, isha:null};
+  d.resp = d.resp||{}; // resp[اسم الطفل][معرّف المسؤولية] = 'alone' | 'reminded' | 'not'
   return d;
 }
 
@@ -1037,7 +1348,7 @@ function renderHeader(){
 }
 
 function renderCurrent(){
-  ({today:renderToday, body:renderBody, kids:renderKids, progress:renderProgress, goals:renderGoals}[currentTab])();
+  ({night:renderNight, today:renderToday, body:renderBody, kids:renderKids, progress:renderProgress, goals:renderGoals}[currentTab])();
   document.querySelectorAll("#tabs button").forEach(b=>
     b.classList.toggle("active", b.dataset.tab===currentTab));
 }
@@ -1048,14 +1359,15 @@ const SPHERES = [
   {key:"rama",  name:"رامة",       color:"#7A4A63", categories:["المرتكز","روحي","جسدي"]},
   {key:"om",    name:"أم",         color:"#4C6B52", categories:["كأم"]},
   {key:"zawja", name:"زوجة",       color:"#B8862F", categories:["كزوجة"]},
-  {key:"rahim", name:"صِلة الرحم", color:"#3A6B86", categories:["صِلة الرحم"]}
 ];
+const KIN_COLOR = "#3A6B86";
 const SPHERE_R = 23;
 const SPHERE_CIRC = 2*Math.PI*SPHERE_R;
 let sphereLastOffset = {}; // key -> آخر إزاحة مرسومة لكل حلقة، لتحريكها بسلاسة بين كل رسم
 let openSphere = null;     // مفتاح الصعيد المفتوح حالياً، أو null إن كانت كل البطاقات مغلقة
 let prayerExpanded = false; // هل بطاقة الصلاة مفتوحة على الصلوات الخمس كاملة؟
 let showTasksPanel = false;
+let kinDraft = null; // مسوّدة إضافة/تعديل بند صلة رحم، أو null إن لم يكن هناك تحرير جارٍ
 let showJournalPanel = false;
 
 function sphereRingSvg(key, doneCount, totalCount, color, startOffset){
@@ -1131,6 +1443,132 @@ function buildGoalRowHtml(g, day){
   </div>`;
 }
 
+/* بطاقة صلة الرحم — بديل الدائرة الرابعة، إيقاعها أسبوعي/شهري لا يومي */
+function buildKidsMsgHtml(item, thisWeekStart){
+  const displayKids = KIN_MSG_DEFAULT_KIDS.concat(item.extraKids||[]);
+  const sentCount = displayKids.filter(name=>item.kids[name]===thisWeekStart).length;
+  const buttonsHtml = displayKids.map(name=>{
+    const sent = item.kids[name]===thisWeekStart;
+    return `<button class="chip ${sent?"on":""}" ${sent?"disabled":`data-action="kinKidSend" data-id="${item.id}" data-kid="${esc(name)}"`}>${esc(name)}</button>`;
+  }).join("");
+  const addBtn = (item.extraKids||[]).includes("سارة") ? "" : `<button class="chip" data-action="kinAddSara" data-id="${item.id}">＋</button>`;
+  return `<div class="kin-item kin-kids-item">
+    <div class="kin-title">${esc(item.title)}</div>
+    <div class="chips">${buttonsHtml}${addBtn}</div>
+    <div class="kin-count">${sentCount} من ${displayKids.length} أرسلوا</div>
+  </div>`;
+}
+function buildKinCardHtml(){
+  const kin=loadKin();
+  const todayKeyStr=todayKey();
+  const todayWd=new Date().getDay();
+  const thisWeekStart=weekStartKey(new Date());
+  const dueItems=kin.filter(it=>kinIsDue(it, todayKeyStr, todayWd));
+
+  let bodyHtml, isDue;
+  if(dueItems.length){
+    isDue=true;
+    bodyHtml=dueItems.map(item=>{
+      if(item.id==="kids-msg") return buildKidsMsgHtml(item, thisWeekStart);
+      return `<div class="kin-item">
+        <span class="kin-title">${esc(item.title)}</span>
+        <button class="btn small" data-action="kinDone" data-id="${item.id}" style="background:${KIN_COLOR}">تمّ</button>
+      </div>`;
+    }).join("");
+  }else{
+    isDue=false;
+    const upcoming=kin.map(item=>({item, days:kinDaysUntilDue(item, todayKeyStr, todayWd)})).sort((a,b)=>a.days-b.days)[0];
+    bodyHtml = upcoming ? `<div class="kin-next">القادم: ${esc(upcoming.item.title)} بعد ${upcoming.days} يوماً</div>` : "";
+  }
+
+  return `<div class="card kin-card ${isDue?"due":""}">
+    <div class="sphere-name" ${isDue?`style="color:${KIN_COLOR}"`:""}>صِلة الرحم</div>
+    ${bodyHtml}
+  </div>`;
+}
+
+/* ---- تبويب: ليلتي ---- واجهة تجميع فقط: تقرأ وتكتب في نفس حقول اليوم الموجودة */
+let nightFarewell = false;
+function nightsWord(n){
+  if(n===1) return "ليلة واحدة";
+  if(n===2) return "ليلتين";
+  if(n>=3 && n<=10) return n+" ليالٍ";
+  return n+" ليلة";
+}
+function daysWord(n){
+  if(n===1) return "بقي يوم واحد";
+  if(n===2) return "بقي يومان";
+  if(n>=3 && n<=10) return "بقي "+n+" أيام";
+  return "بقي "+n+" يوماً";
+}
+function nightCount(){
+  return lastNDays(14).filter(k=>{ const d=state.days[k]; return d && d.night===true; }).length;
+}
+function renderNight(){
+  if(nightFarewell){
+    view.innerHTML = `<div class="card night-farewell">تصبحين على خير 🌿</div>`;
+    return;
+  }
+  const key=todayKey(); const day=getDay(key);
+  const sched=scheduledGoals(key);
+  const now=new Date();
+  const nowH=now.getHours()+now.getMinutes()/60;
+  const todaySchedule=getPrayerSchedule(now);
+
+  const n=nightCount();
+  const pct=Math.min(100, Math.round(n/14*100));
+
+  const goalsHtml = sched.length
+    ? sched.map(g=>buildGoalRowHtml(g, day)).join("")
+    : `<p class="muted">لا أهداف مجدولة اليوم.</p>`;
+
+  view.innerHTML = `
+    <div class="card night-top">
+      <div class="night-count">سجّلتُ ${nightsWord(n)} من 14</div>
+      <div class="night-bar"><span style="width:${pct}%"></span></div>
+    </div>
+
+    <div class="card">
+      <div class="night-h">صلواتي</div>
+      ${buildPrayerMiniRow(day, todaySchedule, nowH, true)}
+    </div>
+
+    <div class="card">
+      <div class="night-h">أهدافي</div>
+      ${goalsHtml}
+    </div>
+
+    <div class="card">
+      <div class="night-h">أولادي</div>
+      ${respTableHtml(day)}
+    </div>
+
+    <div class="card">
+      <div class="night-h">الحقيبة</div>
+      ${bagTimesHtml(day.home)}
+    </div>
+
+    <div class="card">
+      <div class="night-h">بيتنا الليلة</div>
+      ${homeTogglesHtml(day.home)}
+      ${homeThreatFieldsHtml(day.home)}
+      ${authorityFieldsHtml(day.home.authority)}
+    </div>
+
+    <div class="card">
+      <div class="night-h">دقائقي</div>
+      ${cleanupChipsHtml(day.home)}
+    </div>
+
+    <div class="card">
+      <div class="night-h">كلمة عن يومي</div>
+      <textarea rows="2" data-action="inputNote" placeholder="">${esc(day.note||"")}</textarea>
+    </div>
+
+    <button class="btn night-close" data-action="nightClose">تمّ — أغلقي</button>
+  `;
+}
+
 function renderToday(){
   const key=todayKey(); const day=getDay(key);
   const sched=scheduledGoals(key);
@@ -1155,14 +1593,12 @@ function renderToday(){
   const remainMs = nextPrayer ? (nextBaseDate.getTime()+Math.round(nextPrayer.hours*3600*1000)) - now.getTime() : null;
   const prayerSummaryText = nextPrayer ? `${nextPrayer.label} ${fmtClock(nextPrayer.hours)}` : "—";
 
-  const prayerGoalId=findPrayerGoalId();
-  const prayerGoalDone = prayerGoalId ? day.done[prayerGoalId]==="yes" : true;
   const prayerRowsHtml = todaySchedule.map(p=>{
     const isNext = p.key===nextKey;
     const isPast = !isNaN(p.hours) && p.hours<nowH && !isNext;
-    const showAlert = !isNaN(p.hours) && p.hours<=nowH && !prayerGoalDone;
+    const showAlert = !isNaN(p.hours) && p.hours<=nowH && !day.prayerStatus[p.key];
     return `<div class="prayer-row ${isNext?"next":""} ${isPast?"past":""}">
-      <span class="prayer-name">${p.label}${showAlert?'<span class="prayer-alert" title="لم تُعلَّمي الصلاة كمنجَزة بعد"></span>':""}</span>
+      <span class="prayer-name">${p.label}${showAlert?'<span class="prayer-alert" title="لم تُسجَّلي حالة هذه الصلاة بعد"></span>':""}</span>
       <span class="prayer-time">${fmtClock(p.hours)}</span>
     </div>`;
   }).join("");
@@ -1174,31 +1610,48 @@ function renderToday(){
     ? `<div class="day-banner">اليوم ${WD_AR[weekdayOf(key)]} — ${onlyTodayGoals.map(g=>esc(g.name)).join("، ")}</div>`
     : "";
 
+  // شريط الأحد لتنظيم الأسبوع — يختفي بعد إنجاز الخطة أو بعد انتهاء الأحد
+  const weeklyBannerHtml = (new Date().getDay()===0 && !weekPlanDone())
+    ? `<div class="day-banner weekly-banner" data-action="openWeekly">اليوم الأحد — رتّبي أسبوعكِ (٥ دقائق)</div>`
+    : "";
+
   // أربع بطاقات الأصعدة — كل صعيد يجمع فئة أو أكثر، بحلقة تقدّم صغيرة ورقم فقط حين تكون مغلقة
   const sphereTargets={};
   const sphereCardsHtml = SPHERES.map(s=>{
     const goals = sched.filter(g=>s.categories.includes(g.category));
-    const sDone = goals.filter(g=>day.done[g.id]==="yes").length;
-    const sTotal = goals.length;
-    const pct = sTotal? sDone/sTotal : 0;
-    const sIsComplete = sTotal>0 && sDone===sTotal;
+    let sDoneWeight = goals.filter(g=>day.done[g.id]==="yes").length;
+    let sDoneCount = sDoneWeight; // للعرض الصحيح في وسط الحلقة
+    let sTotal = goals.length;
+
+    if(s.key==="rama"){
+      sTotal += 5;
+      PRAYER_ORDER.forEach(pk=>{
+        const st=day.prayerStatus[pk];
+        if(st==="ontime"){ sDoneWeight+=1; sDoneCount+=1; }
+        else if(st==="late"){ sDoneWeight+=0.5; }
+      });
+    }
+
+    const pct = sTotal? sDoneWeight/sTotal : 0;
+    const sIsComplete = sTotal>0 && sDoneWeight===sTotal;
     const targetOffset = SPHERE_CIRC*(1-pct);
     sphereTargets[s.key]=targetOffset;
     const startOffset = sphereLastOffset[s.key]==null ? targetOffset : sphereLastOffset[s.key];
     const isOpen = openSphere===s.key;
 
+    const prayerMiniRowHtml = s.key==="rama" ? buildPrayerMiniRow(day, todaySchedule, nowH) : "";
     const goalsListHtml = !goals.length
-      ? `<p class="muted">لا توجد أهداف مجدولة لهذا اليوم في هذا الصعيد.</p>`
+      ? (s.key!=="rama" ? `<p class="muted">لا توجد أهداف مجدولة لهذا اليوم في هذا الصعيد.</p>` : "")
       : goals.map(g=>buildGoalRowHtml(g, day)).join("");
 
     return `<div class="card sphere-card">
       <div class="sphere-head" data-action="sphereToggle" data-sphere="${s.key}">
-        ${sphereRingSvg(s.key, sDone, sTotal, s.color, startOffset)}
+        ${sphereRingSvg(s.key, sDoneCount, sTotal, s.color, startOffset)}
         <div class="sphere-name">${esc(s.name)}${sIsComplete?`<span class="sphere-check" style="color:${s.color}">✓</span>`:""}</div>
       </div>
-      ${isOpen?`<div class="sphere-goals">${goalsListHtml}</div>`:""}
+      ${isOpen?`${prayerMiniRowHtml}<div class="sphere-goals">${goalsListHtml}</div>`:""}
     </div>`;
-  }).join("");
+  }).join("") + buildKinCardHtml();
 
   // سطر واحد فقط أسفل البطاقات: ملخّص هادئ، أو رسالة اكتمال، أو دفعة مساء لطيفة
   const remaining = c.total - c.done;
@@ -1218,6 +1671,7 @@ function renderToday(){
     </div>`).join("") : `<div class="kg-empty">لا توجد مهامّ معلّقة 🎉</div>`;
 
   view.innerHTML = `
+    ${weeklyBannerHtml}
     ${dayBannerHtml}
     <div class="card">
       <div class="prayer-summary-row" data-action="prayerToggleExpand">
@@ -1692,18 +2146,65 @@ function buildWeekReviewHtml(){
   `;
 }
 
-function renderKids(){
-  if(showWeekReview){ view.innerHTML = buildWeekReviewHtml(); return; }
-
-  const key=todayKey(); const day=getDay(key);
-  const allItems=loadItems();
-
-  const todayWd = weekdayOf(key);
-  const needsReview = todayWd>=5 && !weekReviewFilled(weekStartKey(new Date()));
-
-  const home = day.home;
-  const homeThreatFieldsHtml = home.threat ? `
-    <label class="fld" style="margin-top:0">بماذا هدّدتُ؟</label>
+/* شاشة مراقبة المسؤوليات — مراقبة فقط: تسجيل بلا قواعد ولا تنبيهات */
+function respKidsList(){
+  state.settings = state.settings||{};
+  if(!state.settings.respKids) state.settings.respKids = RESP_KIDS_DEFAULT.slice();
+  return state.settings.respKids;
+}
+/* لبنات مشتركة بين «أولادي» و«ليلتي» — تُبنى مرة وتُستعمل في الشاشتين */
+function respTableHtml(day){
+  const kids=respKidsList();
+  const headHtml=RESPONSIBILITIES.map(r=>`<div class="resp-th">${esc(r.short)}</div>`).join("");
+  const rowsHtml=kids.map(name=>{
+    const kidResp=day.resp[name]||{};
+    const cells=RESPONSIBILITIES.map(r=>{
+      const st=kidResp[r.id];
+      const color=st ? (RESP_STATES.find(s=>s.id===st)||{}).color : "";
+      return `<div class="resp-cell" data-action="respCycle" data-kid="${esc(name)}" data-resp="${r.id}"
+        ${color?`style="background:${color}; border-color:${color}"`:""}></div>`;
+    }).join("");
+    return `<div class="resp-row"><div class="resp-name">${esc(name)}</div>${cells}</div>`;
+  }).join("");
+  const legendHtml=RESP_STATES.map(s=>
+    `<span class="resp-legend-item"><span class="resp-swatch" style="background:${s.color}"></span>${s.label}</span>`
+  ).join("");
+  const showAddSara = !kids.includes("سارة");
+  return `
+    <div class="resp-table">
+      <div class="resp-row resp-head"><div class="resp-name"></div>${headHtml}</div>
+      ${rowsHtml}
+    </div>
+    <div class="resp-legend">${legendHtml}</div>
+    ${showAddSara?`<div style="margin-top:10px"><button class="chip" data-action="respAddSara">＋ سارة</button></div>`:""}
+  `;
+}
+function bagTimesHtml(home){
+  const timeSelect=(field,val)=>`
+    <select data-action="homeTimeField" data-field="${field}">
+      <option value="">—</option>
+      ${RESP_TIMES.map(t=>`<option value="${t}" ${val===t?"selected":""}>${t}</option>`).join("")}
+    </select>`;
+  return `<div class="resp-times">
+    <div>
+      <label class="fld" style="margin-top:0">وقت الاستحقاق</label>
+      ${timeSelect("bagDue", home.bagDue)}
+    </div>
+    <div>
+      <label class="fld" style="margin-top:0">وقت التنفيذ الفعلي</label>
+      ${timeSelect("bagDone", home.bagDone)}
+    </div>
+  </div>`;
+}
+function cleanupChipsHtml(home){
+  return `<div class="chips">${CLEANUP_OPTIONS.map(m=>
+    `<button class="chip ${home.myCleanup===m?"on":""}" data-action="homeCleanup" data-val="${m}">${m===90?"أكثر":m}</button>`
+  ).join("")}</div>`;
+}
+function homeThreatFieldsHtml(home){
+  if(!home.threat) return "";
+  return `
+    <label class="fld">بماذا هدّدتُ؟</label>
     <input type="text" data-action="homeThreatWhat" value="${esc(home.threatWhat)}" placeholder="اكتبي...">
     <label class="fld">هل نفّذتُه؟</label>
     <div class="chips">
@@ -1713,12 +2214,12 @@ function renderKids(){
     ${home.kept===false?`
       <label class="fld">لماذا لم أنفّذ؟</label>
       <input type="text" data-action="homeWhyNot" value="${esc(home.whyNot)}" placeholder="اكتبي...">
-    `:""}
-  ` : "";
-
-  const authority = home.authority;
-  const authorityFieldsHtml = authority.happened ? `
-    <label class="fld" style="margin-top:0">نوع التصرّف</label>
+    `:""}`;
+}
+function authorityFieldsHtml(authority){
+  if(!authority.happened) return "";
+  return `
+    <label class="fld">نوع التصرّف</label>
     <div class="chips">
       ${AUTHORITY_KINDS.map(k=>`<button class="chip ${authority.kinds.includes(k)?"on":""}" data-action="authorityMulti" data-field="kinds" data-val="${esc(k)}">${esc(k)}</button>`).join("")}
     </div>
@@ -1731,8 +2232,39 @@ function renderKids(){
     <div class="repair-field">
       <label class="fld" style="margin-top:0">كيف أصلحه غداً؟</label>
       <input type="text" data-action="authorityField" data-field="repair" value="${esc(authority.repair)}" placeholder="اكتبي خطوة الإصلاح...">
+    </div>`;
+}
+function homeTogglesHtml(home){
+  return `<div class="chips">
+    <button class="chip ${home.group?"on":""}" data-action="homeToggle" data-field="group">نشاط جماعي</button>
+    <button class="chip ${home.threat?"on":""}" data-action="homeToggle" data-field="threat">هدّدتُ</button>
+    <button class="chip ${home.authority.happened?"on":""}" data-action="homeAuthorityToggle">تصرّف أضعف موقفي</button>
+  </div>`;
+}
+
+function buildRespWatchHtml(day){
+  return `
+    <div class="card">
+      <h3 style="margin-top:0">📋 مراقبة المسؤوليات</h3>
+      ${bagTimesHtml(day.home)}
+      ${respTableHtml(day)}
+      <label class="fld">كم دقيقة أصلحتُ ما تركوه اليوم؟</label>
+      ${cleanupChipsHtml(day.home)}
     </div>
-  ` : "";
+  `;
+}
+
+function renderKids(){
+  if(showWeekReview){ view.innerHTML = buildWeekReviewHtml(); return; }
+
+  const key=todayKey(); const day=getDay(key);
+  const allItems=loadItems();
+
+  const todayWd = weekdayOf(key);
+  const needsReview = todayWd>=5 && !weekReviewFilled(weekStartKey(new Date()));
+
+  const home = day.home;
+  const authority = home.authority;
 
   const cards = KIDS.map(name=>{
     const k=day.kids[name];
@@ -1808,9 +2340,11 @@ function renderKids(){
         <button class="chip ${home.threat?"on":""}" data-action="homeToggle" data-field="threat">هدّدتُ اليوم</button>
         <button class="chip ${authority.happened?"on":""}" data-action="homeAuthorityToggle">صدر منّي تصرّف أضعف موقفي</button>
       </div>
-      ${homeThreatFieldsHtml}
-      ${authorityFieldsHtml}
+      ${homeThreatFieldsHtml(home)}
+      ${authorityFieldsHtml(authority)}
     </div>
+
+    ${buildRespWatchHtml(day)}
 
     ${cards}
   `;
@@ -1919,7 +2453,184 @@ function buildPatternsHtml(){
   `;
 }
 
+/* بطاقة «صلواتي في ١٤ يوماً» */
+function buildPrayerStatsHtml(){
+  const last14=lastNDays(14);
+  let daysWithData=0;
+  const counts={};
+  PRAYER_ORDER.forEach(k=>counts[k]={ontime:0,late:0,missed:0});
+  last14.forEach(k=>{
+    const d=state.days[k]; if(!d||!d.prayerStatus) return;
+    let hasAny=false;
+    PRAYER_ORDER.forEach(p=>{
+      const st=d.prayerStatus[p];
+      if(st){ counts[p][st]++; hasAny=true; }
+    });
+    if(hasAny) daysWithData++;
+  });
+  const rows=PRAYER_ORDER.map(k=>({key:k, label:PRAYER_LABELS[k], ...counts[k]}))
+    .sort((a,b)=>b.missed-a.missed);
+  const rowsHtml=rows.map(r=>{
+    const total=r.ontime+r.late+r.missed;
+    const pOn=total?r.ontime/total*100:0, pLate=total?r.late/total*100:0, pMiss=total?r.missed/total*100:0;
+    return `<div class="prayer-stat-row">
+      <div class="prayer-stat-label">${r.label}</div>
+      <div class="prayer-stat-nums">في وقتها ${r.ontime} · متأخّرة ${r.late} · فاتت ${r.missed}</div>
+      <div class="prayer-stat-bar">
+        <span style="width:${pOn}%; background:#4C6B52"></span><span style="width:${pLate}%; background:#B8862F"></span><span style="width:${pMiss}%; background:#7A4A63"></span>
+      </div>
+    </div>`;
+  }).join("");
+  const worst=rows[0];
+  const weakestLine = (daysWithData>=7 && worst && worst.missed>0)
+    ? `<div class="pattern-line">أضعف صلاة عندكِ: ${esc(worst.label)} — فاتت ${worst.missed} مرات.</div>` : "";
+  return `
+    <div class="card">
+      <h3>🕌 صلواتي في ١٤ يوماً</h3>
+      ${rowsHtml}
+      ${weakestLine}
+    </div>
+  `;
+}
+
+/* بطاقة «من يتحمّل مسؤوليته؟» — أرقام فقط، بلا تفسير ولا نصيحة */
+const KID_FEM = {"سهى":true, "سلمى":true, "سارة":true};
+function fmtDuration(totalMin){
+  const mins=Math.max(0, Math.round(totalMin));
+  const h=Math.floor(mins/60), m=mins%60;
+  const parts=[];
+  if(h===1) parts.push("ساعة");
+  else if(h===2) parts.push("ساعتان");
+  else if(h>2) parts.push(`${h} ساعات`);
+  if(m>0) parts.push(`${m} دقيقة`);
+  return parts.length ? parts.join(" و") : "0 دقيقة";
+}
+function buildRespStatsHtml(){
+  const last14=lastNDays(14);
+  const kids=respKidsList();
+  const daysWithResp=last14.filter(k=>{
+    const d=state.days[k];
+    if(!d||!d.resp) return false;
+    return kids.some(n=>d.resp[n] && Object.keys(d.resp[n]).length>0);
+  }).length;
+  if(daysWithResp<7){
+    return `<div class="card"><h3>📋 من يتحمّل مسؤوليته؟</h3><p class="muted">سجّلي سبعة أيام أولاً.</p></div>`;
+  }
+
+  // عدّ «وحده» مقابل الأيام المسجّلة، لكل طفل ولكل مسؤولية
+  const tally={};
+  kids.forEach(n=>{ tally[n]={}; RESPONSIBILITIES.forEach(r=>{ tally[n][r.id]={alone:0, recorded:0}; }); });
+  last14.forEach(k=>{
+    const d=state.days[k]; if(!d||!d.resp) return;
+    kids.forEach(n=>{
+      const kr=d.resp[n]; if(!kr) return;
+      RESPONSIBILITIES.forEach(r=>{
+        const st=kr[r.id]; if(!st) return;
+        tally[n][r.id].recorded++;
+        if(st==="alone") tally[n][r.id].alone++;
+      });
+    });
+  });
+  const pctOf=(a,b)=> b? Math.round(a/b*100) : null;
+
+  const rowsHtml=kids.map(n=>{
+    const parts=RESPONSIBILITIES.map(r=>{
+      const t=tally[n][r.id];
+      const p=pctOf(t.alone, t.recorded);
+      return `${esc(r.short)} ${p==null?"—":p+"٪"}`;
+    }).join(" · ");
+    return `<div class="resp-stat-row"><span class="resp-stat-name">${esc(n)}</span> — ${parts}</div>`;
+  }).join("");
+
+  // الأعلى تحمّلاً بين الأولاد
+  let bestKid=null;
+  kids.forEach(n=>{
+    let alone=0, rec=0;
+    RESPONSIBILITIES.forEach(r=>{ alone+=tally[n][r.id].alone; rec+=tally[n][r.id].recorded; });
+    if(!rec) return;
+    const p=Math.round(alone/rec*100);
+    if(!bestKid || p>bestKid.p) bestKid={name:n, p};
+  });
+  const bestLine = bestKid
+    ? `<div class="pattern-line">الأعلى تحمّلاً: ${esc(bestKid.name)} (${bestKid.p}٪ ${KID_FEM[bestKid.name]?"وحدها":"وحده"})</div>` : "";
+
+  // الأصعب على الجميع
+  let hardest=null;
+  RESPONSIBILITIES.forEach(r=>{
+    let alone=0, rec=0;
+    kids.forEach(n=>{ alone+=tally[n][r.id].alone; rec+=tally[n][r.id].recorded; });
+    if(!rec) return;
+    const p=Math.round(alone/rec*100);
+    if(!hardest || p<hardest.p) hardest={label:r.label, p};
+  });
+  const hardestLine = hardest
+    ? `<div class="pattern-line">الأصعب على الجميع: ${esc(hardest.label)} (${hardest.p}٪ وحدهم)</div>` : "";
+
+  // متوسط تأخير الحقيبة
+  let delaySum=0, delayCount=0;
+  last14.forEach(k=>{
+    const d=state.days[k]; if(!d||!d.home) return;
+    const due=parseHM(d.home.bagDue), done=parseHM(d.home.bagDone);
+    if(due==null || done==null) return; // حقل غير مملوء — لا يدخل في المتوسط
+    delaySum+=(done-due)*60; delayCount++;
+  });
+  const delayLine = delayCount
+    ? `<div class="pattern-line">متوسط تأخير الحقيبة: ${fmtDuration(delaySum/delayCount)}</div>` : "";
+
+  // أصلحتُ بعدهم
+  let cleanupSum=0;
+  last14.forEach(k=>{
+    const d=state.days[k];
+    if(d&&d.home&&typeof d.home.myCleanup==="number") cleanupSum+=d.home.myCleanup;
+  });
+  const cleanupLine = cleanupSum
+    ? `<div class="pattern-line resp-cleanup-line">أصلحتُ بعدهم: ${fmtDuration(cleanupSum)} في ${last14.length} يوماً</div>` : "";
+
+  return `
+    <div class="card">
+      <h3>📋 من يتحمّل مسؤوليته؟</h3>
+      ${rowsHtml}
+      ${bestLine}
+      ${hardestLine}
+      ${delayLine}
+      ${cleanupLine}
+    </div>
+  `;
+}
+
+/* بطاقة «صلة الرحم» — سطر واحد لكل بند بعدد مرات الإنجاز آخر ٩٠ يوماً وتاريخ آخر مرة */
+function buildKinStatsHtml(){
+  const kin=loadKin();
+  const cutoffKey=fmt(new Date(Date.now()-90*86400000));
+  const todayKeyStr=todayKey();
+  const rowsHtml=kin.map(item=>{
+    const count=(item.history||[]).filter(d=>d>=cutoffKey).length;
+    if(!count) return `<div class="kin-stat-row">${esc(item.title)} — لم تُنجَز في آخر ٩٠ يوماً.</div>`;
+    const daysAgo=daysBetween(item.last, todayKeyStr);
+    const lastText = daysAgo<=0 ? "اليوم" : `قبل ${daysAgo} يوماً`;
+    return `<div class="kin-stat-row">${esc(item.title)} — ${count} مرات، آخرها ${lastText}.</div>`;
+  }).join("");
+  return `
+    <div class="card">
+      <h3>🤝 صلة الرحم</h3>
+      ${rowsHtml || '<p class="muted">لا توجد بنود بعد.</p>'}
+    </div>
+  `;
+}
+
 function renderProgress(){
+  // إخفاء الأرقام حتى إكمال ١٤ ليلة مسجّلة — يُرفع الحجاب تلقائياً عند اكتمالها
+  if(state.settings.hideResults){
+    const n=nightCount();
+    if(n<14){
+      view.innerHTML = `<div class="card night-veil">${daysWord(14-n)}. سجّلي ولا تحسبي.</div>`;
+      return;
+    }
+    state.settings.hideResults=false;
+    save();
+    view.innerHTML = `<div class="card night-veil reveal">أكملتِ الأربعة عشر. انظري الآن.</div>`;
+    return;
+  }
   const days14=lastNDays(14);
   const labels=days14.map(shortLabel);
   const goalsPct=days14.map(k=>{const c=dayCompletion(k); return c.total?Math.round(c.done/c.total*100):0;});
@@ -2066,6 +2777,9 @@ function renderProgress(){
       <div class="garden-caption">${impactDays} يوماً من ${garden30.length} فيها أثر</div>
     </div>
     ${buildPatternsHtml()}
+    ${buildPrayerStatsHtml()}
+    ${buildRespStatsHtml()}
+    ${buildKinStatsHtml()}
     <div class="card">
       <h3>📊 آخر ١٤ يوماً</h3>
       <div class="section-title" style="margin-top:0">نسبة إنجاز الأهداف</div>
@@ -2097,24 +2811,32 @@ function renderProgress(){
 
 /* ---- تبويب: أهدافي ---- */
 let icsTimeDraft = null; // null = عرض التبويب العادي، وإلا شاشة اختيار وقت لكل هدف قبل التصدير
+let showWeekly = false; // هل شاشة «أسبوعي» مفتوحة؟
+let weeklyExportResult = null; // ملخّص آخر تصدير أسبوعي، يُعرض مرة واحدة بعد الضغط
 
 function buildIcsPickerHtml(){
   const activeGoals = state.goals.filter(g=>g.active);
-  const rowsHtml = activeGoals.map(g=>{
-    const val = icsTimeDraft[g.id]!==undefined ? icsTimeDraft[g.id] : "";
+  const kinItems = loadKin();
+  const rowHtml = (label, idKey) => {
+    const val = icsTimeDraft[idKey]!==undefined ? icsTimeDraft[idKey] : "";
     return `<div class="ics-row">
-      <span class="ics-goal-name">${esc(g.name)}</span>
-      <select data-action="icsTimeField" data-id="${g.id}">
+      <span class="ics-goal-name">${esc(label)}</span>
+      <select data-action="icsTimeField" data-id="${idKey}">
         <option value="">بدون تذكير</option>
         ${ICS_PRESET_TIMES.map(t=>`<option value="${t}" ${val===t?"selected":""}>${t}</option>`).join("")}
       </select>
     </div>`;
-  }).join("");
+  };
+  const goalRowsHtml = activeGoals.map(g=>rowHtml(g.name, "goal:"+g.id)).join("");
+  const kinRowsHtml = kinItems.map(it=>rowHtml(it.title, "kin:"+it.id)).join("");
   return `
     <div class="card">
-      <h3>⏰ اختاري وقتاً لكل هدف</h3>
-      <p class="muted">اختاري وقت تذكير لكل هدف شغّال، أو اتركيه «بدون تذكير» لتجاهله. سيُصدَّر حدث أسبوعي متكرر في أيام الهدف المحدَّدة.</p>
-      <div class="ics-list">${rowsHtml}</div>
+      <h3>⏰ اختاري وقتاً لكل بند</h3>
+      <p class="muted">اختاري وقت تذكير لكل بند، أو اتركيه «بدون تذكير» لتجاهله. الأهداف تُصدَّر كحدث أسبوعي متكرر في أيامها، وبنود صلة الرحم كحدث أسبوعي أو شهري بحسب إيقاعها.</p>
+      <div class="section-title" style="margin-top:0">الأهداف</div>
+      <div class="ics-list">${goalRowsHtml||'<p class="muted">لا توجد أهداف شغّالة.</p>'}</div>
+      <div class="section-title">صلة الرحم</div>
+      <div class="ics-list">${kinRowsHtml||'<p class="muted">لا توجد بنود.</p>'}</div>
       <div class="row" style="margin-top:14px">
         <button class="btn" data-action="icsExportConfirm">تصدير الملف</button>
         <button class="btn ghost" data-action="icsExportCancel">إلغاء</button>
@@ -2123,8 +2845,172 @@ function buildIcsPickerHtml(){
   `;
 }
 
+/* بطاقة إدارة بنود صلة الرحم داخل تبويب أهدافي */
+function buildKinManageHtml(){
+  const kin=loadKin();
+  const rowsHtml=kin.map(item=>{
+    const cycleLabel = item.cycle==="monthly" ? "شهري" : `أسبوعي (${WD_AR[item.day]})`;
+    const lastLabel = item.last ? `${shortLabel(item.last)}` : "لم يُنجَز بعد";
+    return `<div class="kin-manage-row">
+      <div>
+        <div class="kin-title">${esc(item.title)}</div>
+        <div class="muted">${cycleLabel} · آخر إنجاز: ${lastLabel}</div>
+      </div>
+      <div class="row" style="margin:0">
+        <button class="btn ghost small" data-action="kinEditStart" data-id="${item.id}">تعديل</button>
+        <button class="kg-del" data-action="kinDelete" data-id="${item.id}" title="حذف">✕</button>
+      </div>
+    </div>`;
+  }).join("");
+
+  const formHtml = kinDraft ? `
+    <div class="kin-form">
+      <label class="fld" style="margin-top:0">اسم البند</label>
+      <input type="text" data-action="kinDraftField" data-field="title" value="${esc(kinDraft.title)}" placeholder="مثال: الاتصال بخالتي">
+      <label class="fld">الإيقاع</label>
+      <select data-action="kinDraftCycle">
+        <option value="weekly" ${kinDraft.cycle==="weekly"?"selected":""}>أسبوعي</option>
+        <option value="monthly" ${kinDraft.cycle==="monthly"?"selected":""}>شهري</option>
+      </select>
+      ${kinDraft.cycle==="weekly" ? `
+        <label class="fld">اليوم</label>
+        <select data-action="kinDraftField" data-field="day">
+          ${ALL_DAYS.map(d=>`<option value="${d}" ${(+kinDraft.day===d)?"selected":""}>${WD_AR[d]}</option>`).join("")}
+        </select>
+      ` : ""}
+      <div class="row" style="margin-top:12px">
+        <button class="btn small" data-action="kinDraftSave">حفظ</button>
+        <button class="btn ghost small" data-action="kinDraftCancel">إلغاء</button>
+      </div>
+    </div>` : "";
+
+  return `
+    <div class="card">
+      <div class="row" style="align-items:center; margin:0">
+        <h3 style="margin:0; flex:1">🤝 صلة الرحم</h3>
+        ${!kinDraft?`<button class="btn small grow0" data-action="kinAddStart">بند جديد</button>`:""}
+      </div>
+      ${formHtml}
+      <div style="margin-top:10px">${rowsHtml}</div>
+    </div>
+  `;
+}
+
+/* ---- شاشة: أسبوعي — طقس أسبوعي للتخطيط وتصدير المنبّهات ---- */
+function buildWeeklyTimesStepHtml(){
+  const times=loadTimes();
+  const activeGoals=state.goals.filter(g=>g.active);
+  if(!activeGoals.length) return `<p class="muted">لا توجد أهداف شغّالة بعد.</p>`;
+  return activeGoals.map(g=>{
+    const val=times[g.id]||"";
+    return `<div class="weekly-time-row">
+      <span class="weekly-time-name">${esc(g.name)}</span>
+      <select data-action="weeklyTimeField" data-id="${g.id}">
+        <option value="">بدون تذكير</option>
+        ${QUARTER_TIMES.map(t=>`<option value="${t}" ${val===t?"selected":""}>${t}</option>`).join("")}
+      </select>
+    </div>`;
+  }).join("");
+}
+function buildWeeklyKinStepHtml(){
+  const times=loadTimes();
+  const items=loadKin().filter(kinNeedsPlanning);
+  if(!items.length) return `<p class="muted">لا توجد بنود مستحقّة هذا الأسبوع.</p>`;
+  return items.map(item=>{
+    const val=times["kin:"+item.id]||"";
+    return `<div class="weekly-time-row">
+      <span class="weekly-time-name">${esc(item.title)}</span>
+      <select data-action="weeklyTimeField" data-id="kin:${item.id}">
+        <option value="">بدون تذكير</option>
+        ${QUARTER_TIMES.map(t=>`<option value="${t}" ${val===t?"selected":""}>${t}</option>`).join("")}
+      </select>
+    </div>`;
+  }).join("");
+}
+function buildWeeklyHtml(){
+  const w=weeklySettings();
+  const {activeCount, html:goalsListHtml} = buildActiveGoalsListHtml();
+
+  const summaryHtml = weeklyExportResult ? `
+    <div class="card weekly-summary">
+      <div>${weeklyExportResult.prayerCount} منبّه صلاة</div>
+      <div>${weeklyExportResult.goalCount} منبّه هدف</div>
+      <div>${weeklyExportResult.kinCount} منبّه صلة رحم</div>
+      <div class="weekly-summary-note">افتحي الملف وأضيفيه إلى تقويم «متابعتي».</div>
+    </div>
+  ` : "";
+
+  return `
+    <div class="card">
+      <div class="row" style="align-items:center; margin:0">
+        <h3 style="margin:0; flex:1">📅 أسبوعي</h3>
+        <button class="btn ghost small grow0" data-action="closeWeekly">✕ رجوع</button>
+      </div>
+      <p class="muted" style="margin-top:6px; margin-bottom:0">${lastExportLabel(w)}</p>
+    </div>
+
+    ${summaryHtml}
+
+    <div class="card">
+      <h3 style="margin-top:0">أهداف هذا الأسبوع</h3>
+      <div class="goal-summary">${activeCount} هدفاً شغّالاً</div>
+      ${goalsListHtml}
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">مواعيد المنبّهات</h3>
+      ${buildWeeklyTimesStepHtml()}
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">الصلوات</h3>
+      <div class="goal-row-top">
+        <span class="goal-name ${w.prayerExport?"on":""}">صدّر منبّهات الصلوات الخمس لهذا الأسبوع</span>
+        <button class="toggle ${w.prayerExport?"on":""}" data-action="weeklyPrayerToggle" role="switch" aria-checked="${w.prayerExport}"><span class="knob"></span></button>
+      </div>
+      <label class="fld">التنبيه قبل الأذان بـ (دقيقة)</label>
+      <input type="number" min="0" data-action="weeklyPrayerBefore" value="${w.prayerBefore}">
+      <label class="fld">نصّ التنبيه</label>
+      <input type="text" data-action="weeklyPrayerText" value="${esc(w.prayerText)}">
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">صلة الرحم</h3>
+      ${buildWeeklyKinStepHtml()}
+    </div>
+
+    <button class="btn weekly-export-btn" data-action="weeklyExport">صدّر منبّهات الأسبوع</button>
+  `;
+}
+
+/* قائمة الأهداف الموحّدة مقسّمة على الفئات — تُستعمل في «أهدافي» وفي شاشة «أسبوعي» معاً */
+function buildActiveGoalsListHtml(){
+  const totalGoals=state.goals.length;
+  const activeCount=state.goals.filter(g=>g.active).length;
+  let html="";
+  CAT_ORDER.forEach(cat=>{
+    const items=state.goals.filter(g=>g.category===cat);
+    if(!items.length) return;
+    html+=`<div class="section-title">${esc(cat)}</div>`;
+    html+=items.map(g=>{
+      const daysRow = g.active ? `<div class="days">${ALL_DAYS.map(di=>
+        `<button class="day ${g.days.includes(di)?"on":""}" data-action="goalDay" data-id="${g.id}" data-day="${di}">${DAY_SHORT[di]}</button>`
+      ).join("")}</div>` : "";
+      return `<div class="goal-row">
+        <div class="goal-row-top">
+          <span class="goal-name ${g.active?"on":""}">${esc(g.name)}</span>
+          <button class="toggle ${g.active?"on":""}" data-action="goalToggle" data-id="${g.id}" role="switch" aria-checked="${g.active}"><span class="knob"></span></button>
+        </div>
+        ${daysRow}
+      </div>`;
+    }).join("");
+  });
+  return {activeCount, totalGoals, html};
+}
+
 function renderGoals(){
   if(icsTimeDraft){ view.innerHTML = buildIcsPickerHtml(); return; }
+  if(showWeekly){ view.innerHTML = buildWeeklyHtml(); return; }
 
   const myTasks=loadItems().filter(it=>it.o==="me");
   const myPending=myTasks.filter(it=>!it.d);
@@ -2158,28 +3044,16 @@ function renderGoals(){
     </div>` : "";
 
   // قائمة واحدة موحّدة لكل الأهداف، مقسّمة إلى المجموعات الستّ
-  const totalGoals=state.goals.length;
-  const activeCount=state.goals.filter(g=>g.active).length;
-  let goalsHtml="";
-  CAT_ORDER.forEach(cat=>{
-    const items=state.goals.filter(g=>g.category===cat);
-    if(!items.length) return;
-    goalsHtml+=`<div class="section-title">${esc(cat)}</div>`;
-    goalsHtml+=items.map(g=>{
-      const daysRow = g.active ? `<div class="days">${ALL_DAYS.map(di=>
-        `<button class="day ${g.days.includes(di)?"on":""}" data-action="goalDay" data-id="${g.id}" data-day="${di}">${DAY_SHORT[di]}</button>`
-      ).join("")}</div>` : "";
-      return `<div class="goal-row">
-        <div class="goal-row-top">
-          <span class="goal-name ${g.active?"on":""}">${esc(g.name)}</span>
-          <button class="toggle ${g.active?"on":""}" data-action="goalToggle" data-id="${g.id}" role="switch" aria-checked="${g.active}"><span class="knob"></span></button>
-        </div>
-        ${daysRow}
-      </div>`;
-    }).join("");
-  });
+  const {activeCount, totalGoals, html:goalsHtml} = buildActiveGoalsListHtml();
 
   view.innerHTML = `
+    <div class="card">
+      <div class="row" style="align-items:center; margin:0">
+        <h3 style="margin:0; flex:1">🎯 أهدافي</h3>
+        <button class="btn ghost small grow0" data-action="openWeekly">أسبوعي 📅</button>
+      </div>
+    </div>
+
     <div class="card">
       <h3>✅ مهامّي — لمرة واحدة</h3>
       <div class="row" data-me-row="1">
@@ -2195,6 +3069,20 @@ function renderGoals(){
       <h3>🎯 أهدافي</h3>
       <div class="goal-summary">${activeCount} هدفاً شغّالاً من ${totalGoals}</div>
       ${goalsHtml}
+    </div>
+
+    <div class="card">
+      <div class="goal-row-top">
+        <span class="goal-name ${state.settings.hideResults?"on":""}">أخفِ نتائجي حتى أُكمل ١٤ يوماً</span>
+        <button class="toggle ${state.settings.hideResults?"on":""}" data-action="hideResultsToggle" role="switch" aria-checked="${state.settings.hideResults}"><span class="knob"></span></button>
+      </div>
+    </div>
+
+    ${buildKinManageHtml()}
+
+    <div class="card">
+      <h3>📚 أدلّتي</h3>
+      ${GUIDES.map(g=>`<a class="btn ghost guide-link" href="${esc(g.file)}" target="_blank" rel="noopener">${esc(g.title)}</a>`).join("")}
     </div>
 
     <div class="card">
@@ -2282,6 +3170,77 @@ view.addEventListener("click", e=>{
     renderCurrent();
   }
   else if(a==="prayerToggleExpand"){ prayerExpanded=!prayerExpanded; renderCurrent(); }
+  else if(a==="prayerStatusCycle"){
+    const day=getDay(key); const pk=el.dataset.key;
+    const cur=day.prayerStatus[pk];
+    if(!cur) day.prayerStatus[pk]="ontime";
+    else if(cur==="ontime") day.prayerStatus[pk]="late";
+    else if(cur==="late") day.prayerStatus[pk]="missed";
+    else day.prayerStatus[pk]=null;
+    save(); renderCurrent();
+  }
+  else if(a==="kinDone"){
+    const list=loadKin();
+    const item=list.find(x=>x.id===el.dataset.id);
+    if(item){
+      item.last=todayKey();
+      item.history=item.history||[];
+      item.history.push(todayKey());
+      saveKin(list); renderCurrent();
+    }
+  }
+  else if(a==="kinKidSend"){
+    const list=loadKin();
+    const item=list.find(x=>x.id===el.dataset.id);
+    if(item){
+      const thisWeek=weekStartKey(new Date());
+      const alreadyThisWeek = item.last && item.last>=thisWeek;
+      item.kids=item.kids||{};
+      item.kids[el.dataset.kid]=thisWeek;
+      item.last=todayKey();
+      item.history=item.history||[];
+      if(!alreadyThisWeek) item.history.push(todayKey());
+      saveKin(list); renderCurrent();
+    }
+  }
+  else if(a==="kinAddSara"){
+    const list=loadKin();
+    const item=list.find(x=>x.id===el.dataset.id);
+    if(item){
+      item.extraKids=item.extraKids||[];
+      if(!item.extraKids.includes("سارة")) item.extraKids.push("سارة");
+      saveKin(list); renderCurrent();
+    }
+  }
+  else if(a==="kinAddStart"){ kinDraft={id:null, title:"", cycle:"weekly", day:0}; renderCurrent(); }
+  else if(a==="kinEditStart"){
+    const item=loadKin().find(x=>x.id===el.dataset.id);
+    if(item) kinDraft={id:item.id, title:item.title, cycle:item.cycle, day:item.day!=null?item.day:0};
+    renderCurrent();
+  }
+  else if(a==="kinDraftCancel"){ kinDraft=null; renderCurrent(); }
+  else if(a==="kinDraftSave"){
+    if(!kinDraft) return;
+    const title=(kinDraft.title||"").trim();
+    if(!title){ alert("اكتبي اسم البند أولاً."); return; }
+    const list=loadKin();
+    if(kinDraft.id){
+      const item=list.find(x=>x.id===kinDraft.id);
+      if(item){
+        item.title=title; item.cycle=kinDraft.cycle;
+        if(kinDraft.cycle==="weekly") item.day=+kinDraft.day; else delete item.day;
+      }
+    }else{
+      const newItem={id:genId(), title, cycle:kinDraft.cycle, last:null, history:[]};
+      if(kinDraft.cycle==="weekly") newItem.day=+kinDraft.day;
+      list.push(newItem);
+    }
+    saveKin(list); kinDraft=null; renderCurrent();
+  }
+  else if(a==="kinDelete"){
+    saveKin(loadKin().filter(x=>x.id!==el.dataset.id));
+    renderCurrent();
+  }
   else if(a==="toggleTasksPanel"){ showTasksPanel=!showTasksPanel; renderCurrent(); }
   else if(a==="toggleJournalPanel"){ showJournalPanel=!showJournalPanel; renderCurrent(); }
   else if(a==="delMeal"){
@@ -2445,6 +3404,55 @@ view.addEventListener("click", e=>{
     day.home.authority.happened=!day.home.authority.happened;
     save(); renderCurrent();
   }
+  else if(a==="respCycle"){
+    const day=getDay(key);
+    const kid=el.dataset.kid, rid=el.dataset.resp;
+    day.resp[kid]=day.resp[kid]||{};
+    const order=["alone","reminded","not"];
+    const cur=day.resp[kid][rid];
+    const idx=order.indexOf(cur);
+    if(idx===-1) day.resp[kid][rid]="alone";
+    else if(idx<order.length-1) day.resp[kid][rid]=order[idx+1];
+    else delete day.resp[kid][rid];
+    save(); renderCurrent();
+  }
+  else if(a==="respAddSara"){
+    const list=respKidsList();
+    if(!list.includes("سارة")) list.push("سارة");
+    save(); renderCurrent();
+  }
+  else if(a==="nightClose"){
+    getDay(key).night=true; save();
+    nightFarewell=true; renderCurrent();
+    setTimeout(()=>{ nightFarewell=false; currentTab="today"; renderCurrent(); }, 2000);
+  }
+  else if(a==="hideResultsToggle"){
+    state.settings.hideResults=!state.settings.hideResults;
+    save(); renderCurrent();
+  }
+  else if(a==="openWeekly"){
+    showWeekly=true; weeklyExportResult=null; currentTab="goals"; renderCurrent();
+  }
+  else if(a==="closeWeekly"){
+    showWeekly=false; weeklyExportResult=null; renderCurrent();
+  }
+  else if(a==="weeklyPrayerToggle"){
+    const w=weeklySettings(); w.prayerExport=!w.prayerExport; save(); renderCurrent();
+  }
+  else if(a==="weeklyExport"){
+    const result=buildWeeklyRitualICS();
+    downloadICS(result.ics, "mutabaati-weekly.ics");
+    const w=weeklySettings();
+    w.lastExport=todayKey();
+    weeklyExportResult=result;
+    save(); renderCurrent();
+  }
+  else if(a==="homeCleanup"){
+    const day=getDay(key);
+    const v=+el.dataset.val;
+    day.home.myCleanup = day.home.myCleanup===v ? null : v;
+    save(); renderCurrent();
+  }
   else if(a==="authorityMulti"){
     const day=getDay(key); const auth=day.home.authority;
     const field=el.dataset.field, val=el.dataset.val;
@@ -2514,16 +3522,28 @@ view.addEventListener("click", e=>{
   }
   else if(a==="icsExportStart"){
     const activeGoals=state.goals.filter(g=>g.active);
-    if(!activeGoals.length){ alert("لا توجد أهداف شغّالة لتصديرها."); return; }
+    const kinItems=loadKin();
+    if(!activeGoals.length && !kinItems.length){ alert("لا توجد أهداف أو بنود صلة رحم لتصديرها."); return; }
     icsTimeDraft={};
-    activeGoals.forEach(g=>{ icsTimeDraft[g.id]=CAT_DEFAULT_TIME[g.category]||"08:00"; });
+    activeGoals.forEach(g=>{ icsTimeDraft["goal:"+g.id]=CAT_DEFAULT_TIME[g.category]||"08:00"; });
+    kinItems.forEach(it=>{ icsTimeDraft["kin:"+it.id]=CAT_DEFAULT_TIME["صِلة الرحم"]||"20:00"; });
     renderCurrent();
   }
   else if(a==="icsExportCancel"){ icsTimeDraft=null; renderCurrent(); }
   else if(a==="icsExportConfirm"){
     const activeGoals=state.goals.filter(g=>g.active);
-    const entries=activeGoals.filter(g=>icsTimeDraft[g.id]).map(g=>({name:g.name, days:g.days.slice(), time:icsTimeDraft[g.id]}));
-    if(!entries.length){ alert("لم تختاري وقتاً لأي هدف."); return; }
+    const kinItems=loadKin();
+    const entries=[];
+    activeGoals.forEach(g=>{
+      const t=icsTimeDraft["goal:"+g.id];
+      if(t) entries.push({name:g.name, days:g.days.slice(), time:t});
+    });
+    kinItems.forEach(it=>{
+      const t=icsTimeDraft["kin:"+it.id]; if(!t) return;
+      if(it.cycle==="monthly") entries.push({name:it.title, cycle:"monthly", time:t});
+      else entries.push({name:it.title, days:[it.day], time:t});
+    });
+    if(!entries.length){ alert("لم تختاري وقتاً لأي بند."); return; }
     downloadICS(buildICS(entries));
     icsTimeDraft=null;
     renderCurrent();
@@ -2604,6 +3624,16 @@ view.addEventListener("input", e=>{
     if(!icsTimeDraft) return;
     icsTimeDraft[el.dataset.id]=el.value;
   }
+  else if(a==="kinDraftField"){
+    if(!kinDraft) return;
+    kinDraft[el.dataset.field]=el.value;
+  }
+  else if(a==="weeklyPrayerBefore"){
+    weeklySettings().prayerBefore=+el.value||0; save();
+  }
+  else if(a==="weeklyPrayerText"){
+    weeklySettings().prayerText=el.value||PRAYER_TEXT_DEFAULT; save();
+  }
 });
 
 /* اختيار صورة الوصفة: تصغير عبر canvas قبل الحفظ */
@@ -2636,6 +3666,17 @@ view.addEventListener("change", e=>{
   if(methodEl){ state.prayer.method=methodEl.value; save(); renderCurrent(); return; }
   const manualEl=e.target.closest("[data-action='prayerManualToggle']");
   if(manualEl){ state.prayer.manual=manualEl.checked; save(); renderCurrent(); }
+  const kinCycleEl=e.target.closest("[data-action='kinDraftCycle']");
+  if(kinCycleEl){ if(kinDraft){ kinDraft.cycle=kinCycleEl.value; renderCurrent(); } }
+  const homeTimeEl=e.target.closest("[data-action='homeTimeField']");
+  if(homeTimeEl){ getDay(todayKey()).home[homeTimeEl.dataset.field]=homeTimeEl.value; save(); }
+  const weeklyTimeEl=e.target.closest("[data-action='weeklyTimeField']");
+  if(weeklyTimeEl){
+    const times=loadTimes();
+    if(weeklyTimeEl.value) times[weeklyTimeEl.dataset.id]=weeklyTimeEl.value;
+    else delete times[weeklyTimeEl.dataset.id];
+    saveTimes(times);
+  }
 });
 
 function setStatus(id,msg,cls){
@@ -2644,7 +3685,7 @@ function setStatus(id,msg,cls){
 }
 
 /* ---- تصدير واستيراد كل بيانات التطبيق ---- */
-const APP_STORAGE_KEYS = [STORAGE_KEY, MY_FOODS_KEY, ITEMS_KEY, RECIPES_KEY, MY_INGS_KEY];
+const APP_STORAGE_KEYS = [STORAGE_KEY, MY_FOODS_KEY, ITEMS_KEY, RECIPES_KEY, MY_INGS_KEY, KIN_KEY, TIMES_KEY];
 function exportAllData(){
   const data={};
   APP_STORAGE_KEYS.forEach(k=>{
@@ -2687,7 +3728,8 @@ document.getElementById("tabs").addEventListener("click", e=>{
   currentTab=b.dataset.tab; renderCurrent();
 });
 
-/* البدء */
+/* البدء — بعد السابعة مساءً تُفتح «ليلتي»، وقبلها «اليوم» كالمعتاد */
+if(new Date().getHours()>=19) currentTab="night";
 renderHeader();
 renderCurrent();
 
