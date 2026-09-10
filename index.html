@@ -9,7 +9,7 @@
   ارفعي هذا الرقم عند كل تحديث تنشرينه — هذا وحده يكفي ليأخذ هاتفكِ
   النسخة الجديدة (يُستعمل في اسم كاش الـ service worker في sw.js).
 -->
-<script>const VERSION='1.1.3';</script>
+<script>const VERSION='1.2.0';</script>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-512.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.svg">
@@ -295,17 +295,112 @@
   .resp-times{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;}
   .resp-times select{width:100%;}
   .resp-table{width:100%;}
-  .resp-row{display:grid; grid-template-columns:minmax(42px,1fr) repeat(5,1fr); gap:5px; align-items:center; margin-bottom:5px;}
+  .resp-row, .growth-row{display:grid; grid-template-columns:minmax(38px,1fr) repeat(7,1fr); gap:4px; align-items:center; margin-bottom:5px;}
+  .touch-row{display:grid; grid-template-columns:minmax(38px,1fr) repeat(5,1fr); gap:5px; align-items:center; margin-bottom:6px;}
   .resp-head{margin-bottom:7px;}
-  .resp-th{font-size:9.5px; line-height:1.2; color:var(--soft); text-align:center; font-style:italic;}
-  .resp-name{font-size:12px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .resp-th{font-size:15px; line-height:1.2; text-align:center; cursor:pointer; user-select:none; -webkit-user-select:none;}
+  .resp-name{font-size:11px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .resp-cell{
     aspect-ratio:1; width:100%; border-radius:7px;
     border:1.5px solid var(--line); background:#fff; cursor:pointer; transition:.12s;
   }
+  .resp-row-wrap{margin-bottom:4px;}
+  .resp-row-wrap .resp-row{margin-bottom:2px;}
+  .resp-all-btn{
+    display:block; margin-inline-start:auto; font-size:10px; color:var(--soft);
+    background:none; border:0; padding:2px 4px; cursor:pointer;
+  }
+  .resp-tip{
+    background:var(--ink); color:#fff; font-size:12px; text-align:center;
+    border-radius:8px; padding:6px 10px; margin-bottom:8px;
+  }
+  .growth-cell{
+    aspect-ratio:1; width:100%; border-radius:7px; background:var(--bg); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:var(--ink);
+  }
+  .growth-cell.low{background:rgba(76,107,82,.12);}
+  .growth-cell.mid{background:rgba(76,107,82,.4); color:#fff;}
+  .growth-cell.high{background:var(--moss); color:#fff;}
   .resp-legend{display:flex; flex-wrap:wrap; gap:12px; margin-top:12px; font-size:12px; color:var(--soft);}
   .resp-legend-item{display:flex; align-items:center; gap:5px;}
   .resp-swatch{width:11px; height:11px; border-radius:3px; display:inline-block;}
+  .kid-detail-card{padding-top:12px; padding-bottom:12px;}
+  .kid-detail-head{
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:15px; font-weight:700; cursor:pointer;
+  }
+  .kid-detail-arrow{font-size:11px; color:var(--soft);}
+
+  /* دوري كمعلّمة — سلّم الانسحاب */
+  .ladder-row{padding:10px 0; border-bottom:1px solid var(--line);}
+  .ladder-row:last-child{border-bottom:0;}
+  .ladder-head{display:flex; align-items:center; justify-content:space-between; gap:8px;}
+  .ladder-name{font-size:14px; font-weight:700;}
+  .ladder-btns{display:flex; gap:6px;}
+  .ladder-btn{
+    width:28px; height:28px; border-radius:8px; border:1px solid var(--line);
+    background:#fff; font-size:14px; cursor:pointer;
+  }
+  .ladder-btn:disabled{opacity:.3; cursor:default;}
+  .ladder-dots{display:flex; gap:5px; margin:8px 0 4px;}
+  .ladder-dot{width:14px; height:14px; border-radius:50%; border:2px solid var(--line); background:#fff;}
+  .ladder-dot.on{background:#4C6B52; border-color:#4C6B52;}
+  .ladder-level-label{font-size:12px; color:var(--ink);}
+  .ladder-form{background:var(--bg); border-radius:10px; padding:12px; margin:10px 0;}
+  .ladder-stat-row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:8px 2px; border-bottom:1px solid var(--line); font-size:13px;}
+  .ladder-stat-row:last-child{border-bottom:0;}
+  .stopped-row{padding:7px 2px; border-bottom:1px solid var(--line); font-size:13px;}
+  .stopped-row:last-child{border-bottom:0;}
+  .stopped-date{color:var(--soft); font-size:12px;}
+
+  /* قائمة الغد */
+  .tomorrow-field-row{display:flex; align-items:center; gap:8px; margin-bottom:8px;}
+  .tomorrow-num{
+    width:22px; height:22px; border-radius:50%; background:var(--bg); color:var(--soft);
+    display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex:0 0 auto;
+  }
+  .tomorrow-field-row input{flex:1;}
+  .tomorrow-picker{margin-top:10px; border:1px solid var(--line); border-radius:10px; overflow:hidden;}
+  .tomorrow-picker-item{padding:10px 12px; border-bottom:1px solid var(--line); font-size:14px; cursor:pointer;}
+  .tomorrow-picker-item:last-child{border-bottom:0;}
+  .tomorrow-picker-item:active{background:var(--bg);}
+  .tomorrow-unfinished-row{background:var(--bg); border-radius:10px; padding:10px 12px; margin-bottom:10px;}
+  .tomorrow-unfinished-text{font-size:14px; margin-bottom:8px;}
+  .tomorrow-moved-warn{color:#B8862F; font-size:12px; margin-top:6px;}
+  .tomorrow-read-card{background:rgba(58,107,134,.08); border:1px solid rgba(58,107,134,.25);}
+  .tomorrow-collapsed{text-align:center; font-weight:700; color:#3A6B86; padding:14px;}
+  .tomorrow-check-row{display:flex; align-items:center; gap:10px; padding:8px 2px; cursor:pointer;}
+  .tomorrow-chk{
+    width:20px; height:20px; border-radius:6px; border:1.5px solid #3A6B86; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center; font-size:13px; color:#fff;
+  }
+  .tomorrow-chk.on{background:#3A6B86;}
+  .tomorrow-done-text{text-decoration:line-through; color:var(--soft);}
+
+  /* الالتقاط السريع — البطاقة والأرشيف */
+  .catch-due-card{background:rgba(58,107,134,.08); border:1px solid rgba(58,107,134,.25);}
+  .catch-row{padding:8px 0; border-bottom:1px solid var(--line);}
+  .catch-row:last-child{border-bottom:0;}
+  .catch-text{font-size:14px; margin-bottom:8px;}
+  .catch-archive-row{padding:8px 2px; border-bottom:1px solid var(--line); font-size:13px;}
+  .catch-archive-row:last-child{border-bottom:0;}
+
+  /* بشرتي */
+  .skin-step-row{display:flex; align-items:center; gap:10px; padding:9px 0; cursor:pointer; border-bottom:1px solid var(--line);}
+  .skin-step-row:last-child{border-bottom:0;}
+  .skin-chk{
+    width:22px; height:22px; border-radius:6px; border:1.5px solid var(--line); flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center; font-size:13px; color:#fff; background:#fff;
+  }
+  .skin-chk.on{background:var(--moss); border-color:var(--moss);}
+  .skin-step-label{font-size:14px; flex:1;}
+  .skin-step-label.skin-mandatory{font-weight:700; color:#B8862F;}
+  .skin-mandatory-tag{font-size:11px; font-weight:700; color:#B8862F; border:1px solid #B8862F; border-radius:6px; padding:1px 6px; flex:0 0 auto;}
+  .skin-retinal-warn{margin-top:10px; font-size:12px; color:#7A4A63;}
+  .skin-photo-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px;}
+  .skin-photo-item img{width:100%; aspect-ratio:1; object-fit:cover; border-radius:8px; display:block;}
+  .skin-photo-date{font-size:10px; color:var(--soft); text-align:center; margin-top:3px;}
+  .skin-pregnancy-warning{margin-top:12px; font-size:13px; font-weight:700; color:#7A4A63; background:rgba(122,74,99,.08); border-radius:8px; padding:10px 12px;}
   .kin-manage-row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 2px; border-bottom:1px solid var(--line);}
   .kin-manage-row:last-child{border-bottom:0;}
   .kin-form{background:var(--bg); border-radius:12px; padding:12px; margin-top:10px;}
@@ -317,7 +412,35 @@
   .kg-item.done .kg-chk{background:var(--moss); border-color:var(--moss);}
   .kg-item .kg-text{flex:1; font-size:14px;}
   .kg-item.done .kg-text{color:var(--soft); text-decoration:line-through;}
-  .kg-item .kg-del{background:none; border:0; color:var(--soft); font-size:16px; flex:0 0 auto; padding:2px 4px;}
+  .kg-del{
+    background:none; border:0; color:var(--soft); font-size:16px; flex:0 0 auto;
+    min-width:40px; min-height:40px; display:flex; align-items:center; justify-content:center;
+  }
+  .kg-del.confirming{color:#7A4A63; font-weight:700; font-size:13px; white-space:nowrap;}
+
+  /* لحظاتي معهم */
+  .touch-cell{
+    aspect-ratio:1; width:100%; border-radius:7px;
+    border:1.5px solid var(--line); background:#fff; cursor:pointer; transition:.12s;
+  }
+  .touch-cell.on{background:#7A4A63; border-color:#7A4A63;}
+  .touch-cell.touch-na{
+    display:flex; align-items:center; justify-content:center; color:var(--soft);
+    opacity:.35; cursor:default; font-size:12px;
+  }
+  .touch-check{color:#4C6B52; font-weight:700; margin-inline-start:4px;}
+  .resp-th.clickable{cursor:pointer;}
+
+  /* قائمة أهدافي الرئيسية وصفحاتها */
+  .goals-menu-card{padding:4px 0;}
+  .goals-menu-row{display:flex; align-items:center; gap:10px; padding:14px 16px; border-bottom:1px solid var(--line); cursor:pointer;}
+  .goals-menu-row:last-child{border-bottom:0;}
+  .goals-menu-icon{font-size:20px; flex:0 0 auto;}
+  .goals-menu-text{flex:1; font-size:14px; font-weight:700; min-width:0;}
+  .goals-menu-arrow{font-size:18px; color:var(--soft); flex:0 0 auto;}
+  .goals-page-head{position:sticky; top:0; z-index:5;}
+  .goal-sphere-head{display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:700; font-size:15px;}
+  .goal-sphere-head .muted{font-weight:400; font-size:12px; flex:1;}
   .kg-empty{font-size:13px; color:var(--soft); padding:6px 2px;}
   .kg-done-list{margin-top:10px; padding-top:8px; border-top:1px dashed var(--line);}
 
@@ -398,6 +521,24 @@
   }
   nav.tabs button .ic{font-size:19px; line-height:1;}
   nav.tabs button.active{color:var(--plum);}
+
+  /* الالتقاط السريع */
+  .fab-catch{
+    position:fixed; left:16px; bottom:calc(64px + env(safe-area-inset-bottom));
+    width:52px; height:52px; border-radius:50%; z-index:20;
+    background:#3A6B86; color:#fff; border:0; font-size:26px; line-height:1;
+    box-shadow:0 3px 10px rgba(0,0,0,.25); cursor:pointer;
+  }
+  .catch-overlay{
+    position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:30;
+    display:flex; align-items:flex-end;
+  }
+  .catch-sheet{
+    background:#fff; width:100%; border-radius:18px 18px 0 0;
+    padding:18px 16px calc(18px + env(safe-area-inset-bottom));
+  }
+  .catch-sheet input[type="text"]{font-size:16px; margin-bottom:12px;}
+  .catch-sheet .chips{margin-bottom:10px;}
 </style>
 </head>
 <body>
@@ -417,20 +558,41 @@
   <button data-tab="goals"><span class="ic">🎯</span>أهدافي</button>
 </nav>
 
+<button class="fab-catch" id="fabCatch" aria-label="التقاط سريع">＋</button>
+<div id="catchSheetSlot"></div>
+
 <script>
 "use strict";
 /* ============ الثوابت ============ */
 /* أدلّة للقراءة فقط (ملفات HTML مستقلة داخل مجلد المشروع) — أضيفي عليها لاحقاً بنفس الشكل */
 const GUIDES=[{title:'دليل الغسيل', file:'laundry.html'}];
 const KIDS = ["أحمد","إبراهيم","سهى","سلمى","سارة"];
+/* لحظاتي معهم — لحظات لمس يومية مسمّاة */
+const TOUCH_MOMENTS = [
+  {id:"wake",   icon:"☀️", short:"الاستيقاظ",  label:"الاستيقاظ — أول لقاء في اليوم",      schoolOnly:false},
+  {id:"door",   icon:"🚪", short:"عند الباب",  label:"عند الباب — قبل الخروج للمدرسة",     schoolOnly:true},
+  {id:"back",   icon:"🏠", short:"العودة",     label:"العودة — قبل أي سؤال عن الواجبات",   schoolOnly:true},
+  {id:"dinner", icon:"🍽️", short:"قبل العشاء", label:"قبل العشاء — ولو لمسة كتف",          schoolOnly:false},
+  {id:"night",  icon:"🌙", short:"قبل النوم",  label:"قبل النوم — الأطول",                  schoolOnly:false}
+];
+function goesToSchoolSettings(){
+  state.settings=state.settings||{};
+  if(!state.settings.goesToSchool) state.settings.goesToSchool={};
+  KIDS.forEach(name=>{
+    if(state.settings.goesToSchool[name]===undefined) state.settings.goesToSchool[name]=(name!=="سارة");
+  });
+  return state.settings.goesToSchool;
+}
 /* شاشة مراقبة المسؤوليات — مراقبة فقط، بلا قواعد ولا تنبيهات */
 const RESP_KIDS_DEFAULT = ["أحمد","إبراهيم","سهى","سلمى"];
 const RESPONSIBILITIES = [
-  {id:"bag",    label:"الحقيبة",       short:"الحقيبة"},
-  {id:"lunch",  label:"علبة الطعام",   short:"علبة الطعام"},
-  {id:"wake",   label:"الاستيقاظ للمدرسة", short:"الاستيقاظ"},
-  {id:"sleep",  label:"النوم في موعده",    short:"النوم"},
-  {id:"tidy",   label:"ترتيب ما عبث به",   short:"الترتيب"}
+  {id:"wake",    label:"استيقظ باكراً للمدرسة",              icon:"⏰"},
+  {id:"bag",     label:"رتّب حقيبته",                        icon:"🎒"},
+  {id:"bring",   label:"أدخل حقيبته وعلبة طعامه إلى المطبخ", icon:"🍱"},
+  {id:"laundry", label:"أنزل غسيله",                          icon:"🧺"},
+  {id:"room",    label:"رتّب غرفته",                          icon:"🛏️"},
+  {id:"fix",     label:"أصلح خطأه بنفسه",                     icon:"🔧"},
+  {id:"own",     label:"تحمّل نتيجة قراره بلا شكوى",          icon:"⚖️"}
 ];
 const RESP_STATES = [
   {id:"alone",    label:"وحده",    color:"#4C6B52"},
@@ -439,6 +601,9 @@ const RESP_STATES = [
 ];
 const RESP_TIMES = ["15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00"];
 const CLEANUP_OPTIONS = [0,10,20,30,45,60,90];
+/* دوري كمعلّمة — سلّم الانسحاب التدريجي وعدّادا التدخّل اليوميّان */
+const LADDER_LEVELS = ["أفعل وهو يرى","نفعلها معاً","يفعل وأنا أوجّه","يفعل وأنا صامتة","يفعل وأنا غائبة"];
+const INTERFERE_OPTIONS = [0,1,2,3,4,5,6];
 const WD_AR = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
 const DAY_SHORT = ["ح","ن","ث","ر","خ","ج","س"]; // مفهرسة حسب getDay: الأحد..السبت
 const ALL_DAYS = [0,1,2,3,4,5,6];
@@ -665,10 +830,13 @@ function foodGroups(){
 
 /* أهداف الأولاد ومهامّي لمرة واحدة — مصفوف واحد مشترك: {id, x, o, d, dt} */
 const ITEMS_KEY = "mt_items";
-const ITEMS_SEED = [{id:1, x:"موعد طبيب عظام لأحمد", o:"أحمد", d:false, dt:null}];
+const ITEMS_SEED = [{id:"g_seed1", x:"موعد طبيب عظام لأحمد", o:"أحمد", d:false, dt:null}];
 function loadItems(){
-  try{ const raw=localStorage.getItem(ITEMS_KEY); if(raw) return JSON.parse(raw); }
-  catch(e){ console.warn(e); }
+  // فحص وجود المفتاح نفسه لا طول المصفوفة، حتى لا تُزرع المهمة الابتدائية مجدَّداً بعد حذف كل شيء
+  const raw=localStorage.getItem(ITEMS_KEY);
+  if(raw!==null){
+    try{ return JSON.parse(raw); }catch(e){ console.warn(e); return []; }
+  }
   saveItems(ITEMS_SEED);
   return ITEMS_SEED.slice();
 }
@@ -720,6 +888,125 @@ function loadKin(){
 function saveKin(list){ try{ localStorage.setItem(KIN_KEY, JSON.stringify(list)); }catch(e){ console.warn(e); } }
 function daysBetween(keyA, keyB){
   return Math.round((new Date(keyB+"T00:00:00") - new Date(keyA+"T00:00:00"))/86400000);
+}
+
+/* سلّم الانسحاب التدريجي — مهارات الاستقلالية لكل طفل */
+const LADDER_KEY = "mt_ladder";
+function loadLadder(){
+  let list;
+  try{ const raw=localStorage.getItem(LADDER_KEY); list = raw?JSON.parse(raw):null; }
+  catch(e){ console.warn(e); list=null; }
+  if(!list) list=[];
+  list.forEach(s=>{ s.history=s.history||[]; });
+  return list;
+}
+function saveLadder(list){ try{ localStorage.setItem(LADDER_KEY, JSON.stringify(list)); }catch(e){ console.warn(e); } }
+
+/* قائمة الغد — ثلاثة بنود فقط لكل تاريخ */
+const TOMORROW_KEY = "mt_tomorrow";
+function emptyTomorrowSlots(){ return [{t:"",done:false,moved:0},{t:"",done:false,moved:0},{t:"",done:false,moved:0}]; }
+function loadTomorrow(){
+  try{ const raw=localStorage.getItem(TOMORROW_KEY); if(raw) return JSON.parse(raw); }
+  catch(e){ console.warn(e); }
+  return {};
+}
+function saveTomorrow(store){ try{ localStorage.setItem(TOMORROW_KEY, JSON.stringify(store)); }catch(e){ console.warn(e); } }
+function ensureTomorrowSlot(store, key){
+  store[key]=store[key]||emptyTomorrowSlots();
+  while(store[key].length<3) store[key].push({t:"",done:false,moved:0});
+  return store[key];
+}
+
+/* بشرتي — خطوات الروتين، برنامج تدرّج الريتينال، وصور التتبّع الشهرية */
+const SKIN_MORNING_STEPS = [
+  {id:"cleanser",  label:"غسول لطيف"},
+  {id:"vitaminC",  label:"Geek & Gorgeous C-Glow فيتامين C 15%"},
+  {id:"toleriane", label:"La Roche-Posay Toleriane Sensitive Fluide"},
+  {id:"spf",       label:"La Roche-Posay Anthelios UVMune 400 SPF50+", mandatory:true}
+];
+const SKIN_RETINAL_STEPS = [
+  {id:"cleanser",  label:"غسول لطيف"},
+  {id:"waitDry",   label:"انتظار حتى يجفّ الوجه تماماً"},
+  {id:"retinal",   label:"CELIMAX The Vita-A Retinal Shot 0.1%"},
+  {id:"toleriane", label:"La Roche-Posay Toleriane Sensitive Fluide"},
+  {id:"noni",      label:"CELIMAX Real Noni Energy Ampoule — إن احتجتُ ترطيباً إضافياً", optional:true}
+];
+const SKIN_BRIGHTENING_STEPS = [
+  {id:"cleanser",    label:"غسول لطيف"},
+  {id:"brightening", label:"CELIMAX Pore + Dark Spot Brightening Serum"},
+  {id:"toleriane",   label:"La Roche-Posay Toleriane Sensitive Fluide"},
+  {id:"noni",        label:"CELIMAX Real Noni Energy Ampoule — إن احتجتُ ترطيباً إضافياً", optional:true}
+];
+const SKIN_BODY_STEP = {id:"body", label:"Eucerin DermoPure Clinical — طبقة رقيقة على آثار الظهر بعد الاستحمام"};
+
+const SKIN_KEY = "mt_skin";
+function skinSettings(){
+  let s;
+  try{ const raw=localStorage.getItem(SKIN_KEY); s=raw?JSON.parse(raw):null; }
+  catch(e){ console.warn(e); s=null; }
+  if(!s) s={start:todayKey(), nightsPerWeek:2, retinalDays:[4,0], weeklyIrritation:{}, lastIncrease:null};
+  return s;
+}
+function saveSkinSettings(s){ try{ localStorage.setItem(SKIN_KEY, JSON.stringify(s)); }catch(e){ console.warn(e); } }
+function isRetinalNight(dateObj){
+  return skinSettings().retinalDays.includes((dateObj||new Date()).getDay());
+}
+function skinWeekNumber(s){ return Math.floor(daysBetween(s.start, todayKey())/7)+1; }
+function skinPendingIrritationWeek(s){
+  const d=new Date(weekStartKey(new Date())+"T00:00:00"); d.setDate(d.getDate()-7);
+  const lastWeekKey=fmt(d);
+  return s.weeklyIrritation[lastWeekKey]===undefined ? lastWeekKey : null;
+}
+
+/* صور تتبّع الشهر — الحدّ ١٢ صورة، الأقدم يُحذف تلقائياً */
+const SKIN_PHOTOS_KEY = "mt_skin_photos";
+function loadSkinPhotos(){
+  try{ const raw=localStorage.getItem(SKIN_PHOTOS_KEY); if(raw) return JSON.parse(raw); }
+  catch(e){ console.warn(e); }
+  return [];
+}
+function saveSkinPhotos(list){
+  while(list.length>12) list.shift();
+  try{ localStorage.setItem(SKIN_PHOTOS_KEY, JSON.stringify(list)); }
+  catch(e){ console.warn(e); alert("تعذّر حفظ الصورة — قد تكون مساحة التخزين ممتلئة."); }
+}
+
+/* الالتقاط السريع — ملاحظة عن طفل تظهر تلقائياً في وقتها ثم تُؤرشَف؛ أداة تشغيل لا مادة تحليل */
+const CATCH_KEY = "mt_catch";
+const CATCH_KID_OPTIONS = [...KIDS, "للجميع"];
+const CATCH_WHEN = [
+  {id:"afterschool", label:"عند عودته من المدرسة", from:13, to:17},
+  {id:"dinner",       label:"قبل العشاء",           from:16, to:19.5},
+  {id:"night",        label:"الليلة",                from:19.5, to:24},
+  {id:"morning",      label:"غداً صباحاً",           from:6, to:9.5}
+];
+const CATCH_ARCHIVE_MS = 48*3600*1000;
+function loadCatch(){
+  let list;
+  try{ const raw=localStorage.getItem(CATCH_KEY); list = raw?JSON.parse(raw):null; }
+  catch(e){ console.warn(e); list=null; }
+  if(!list) list=[];
+  // أرشفة تلقائية: أي بند لم يُلمَس بعد ٤٨ ساعة يفقد فائدته ويُخفى
+  const now=Date.now();
+  let changed=false;
+  list.forEach(c=>{
+    if(!c.archived && now-c.created>CATCH_ARCHIVE_MS){ c.archived=true; changed=true; }
+  });
+  if(changed) saveCatch(list);
+  return list;
+}
+function saveCatch(list){ try{ localStorage.setItem(CATCH_KEY, JSON.stringify(list)); }catch(e){ console.warn(e); } }
+function catchWhenLabel(id){ const w=CATCH_WHEN.find(x=>x.id===id); return w?w.label:id; }
+function catchIsDueNow(when){
+  const w=CATCH_WHEN.find(x=>x.id===when); if(!w) return false;
+  const now=new Date();
+  const h=now.getHours()+now.getMinutes()/60;
+  return h>=w.from && h<w.to;
+}
+function catchNextWhen(when){
+  const order=["afterschool","dinner","night","morning"];
+  const idx=order.indexOf(when);
+  return order[(idx+1)%order.length];
 }
 function kinIsDue(item, todayKeyStr, todayWd){
   if(item.cycle==="monthly"){
@@ -1216,6 +1503,7 @@ function fmt(d){
   return `${y}-${m}-${da}`;
 }
 function todayKey(){ const d=new Date(); d.setHours(0,0,0,0); return fmt(d); }
+function tomorrowKey(){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+1); return fmt(d); }
 function weekdayOf(key){ return new Date(key+"T00:00:00").getDay(); }
 function shortLabel(key){ const [y,m,d]=key.split("-"); return `${+d}/${+m}`; }
 function lastNDays(n){
@@ -1238,6 +1526,8 @@ function getDay(key){
     const kd=d.kids[k];
     kd.scoldTime=kd.scoldTime||[]; kd.scoldTrigger=kd.scoldTrigger||[];
     kd.scoldStyle=kd.scoldStyle||[]; kd.scoldState=kd.scoldState||[];
+    if(kd.note===undefined) kd.note="";
+    if(!kd.touch) kd.touch={wake:false, door:false, back:false, dinner:false, night:false};
   });
   d.exercise = d.exercise||{done:false,what:"",minutes:0,steps:0};
   d.meals = d.meals||[];
@@ -1249,8 +1539,16 @@ function getDay(key){
   if(d.home.bagDue===undefined) d.home.bagDue="18:00";
   if(d.home.bagDone===undefined) d.home.bagDone="";
   if(d.home.myCleanup===undefined) d.home.myCleanup=null;
+  if(d.home.interfered===undefined) d.home.interfered=null;
+  if(d.home.didItFor===undefined) d.home.didItFor=null;
+  if(d.home.stoppedDoing===undefined) d.home.stoppedDoing="";
   d.prayerStatus = d.prayerStatus||{fajr:null, dhuhr:null, asr:null, maghrib:null, isha:null};
   d.resp = d.resp||{}; // resp[اسم الطفل][معرّف المسؤولية] = 'alone' | 'reminded' | 'not'
+  d.skin = d.skin || {
+    morning:{cleanser:false, vitaminC:false, toleriane:false, spf:false},
+    evening:{cleanser:false, waitDry:false, retinal:false, toleriane:false, noni:false, brightening:false},
+    body:false, eyePatch:false
+  };
   return d;
 }
 
@@ -1533,6 +1831,8 @@ function renderNight(){
       ${buildPrayerMiniRow(day, todaySchedule, nowH, true)}
     </div>
 
+    ${!day.skin.morning.spf ? `<div class="muted" style="text-align:center; margin:-6px 0 4px">لم تُسجَّل الواقية اليوم</div>` : ""}
+
     <div class="card">
       <div class="night-h">أهدافي</div>
       ${goalsHtml}
@@ -1542,6 +1842,10 @@ function renderNight(){
       <div class="night-h">أولادي</div>
       ${respTableHtml(day)}
     </div>
+
+    ${buildTouchTableHtml(day)}
+    ${buildLadderHtml()}
+    ${buildTeacherNightHtml(day)}
 
     <div class="card">
       <div class="night-h">الحقيبة</div>
@@ -1564,6 +1868,8 @@ function renderNight(){
       <div class="night-h">كلمة عن يومي</div>
       <textarea rows="2" data-action="inputNote" placeholder="">${esc(day.note||"")}</textarea>
     </div>
+
+    ${buildTomorrowWriteHtml()}
 
     <button class="btn night-close" data-action="nightClose">تمّ — أغلقي</button>
   `;
@@ -1667,12 +1973,14 @@ function renderToday(){
     <div class="kg-item" data-action="kgDone" data-id="${it.id}">
       <div class="kg-chk"></div>
       <div class="kg-text">${esc(it.x)}${it.o!=="me"?` <span class="muted">· ${esc(it.o)}</span>`:""}</div>
-      <button class="kg-del" data-action="kgDel" data-id="${it.id}" title="حذف">✕</button>
+      ${deleteButtonHtml("kgDel", it.id)}
     </div>`).join("") : `<div class="kg-empty">لا توجد مهامّ معلّقة 🎉</div>`;
 
   view.innerHTML = `
     ${weeklyBannerHtml}
     ${dayBannerHtml}
+    ${buildCatchDueCardHtml()}
+    ${buildTomorrowReadHtml()}
     <div class="card">
       <div class="prayer-summary-row" data-action="prayerToggleExpand">
         <span class="prayer-summary-text">${prayerSummaryText}</span>
@@ -1740,18 +2048,19 @@ function buildFoodListHtml(){
 }
 
 /* ---- تبويب: جسدي ---- */
-let bodySubTab = "daily"; // "daily" | "recipes"
+let bodySubTab = "daily"; // "daily" | "recipes" | "skin"
 
 function renderBody(){
   view.innerHTML = `
     <div class="subtabs">
       <button class="subtab ${bodySubTab==="daily"?"active":""}" data-action="bodySubTab" data-sub="daily">يومي</button>
       <button class="subtab ${bodySubTab==="recipes"?"active":""}" data-action="bodySubTab" data-sub="recipes">وصفاتي</button>
+      <button class="subtab ${bodySubTab==="skin"?"active":""}" data-action="bodySubTab" data-sub="skin">بشرتي</button>
     </div>
     <div id="bodySubView"></div>
   `;
   document.getElementById("bodySubView").innerHTML =
-    bodySubTab==="daily" ? buildDailyBodyHtml() : buildRecipesTabHtml();
+    bodySubTab==="daily" ? buildDailyBodyHtml() : bodySubTab==="recipes" ? buildRecipesTabHtml() : buildSkinTabHtml();
 }
 
 function buildDailyBodyHtml(){
@@ -1974,6 +2283,152 @@ function resizeImageFile(file, maxWidth, quality){
   });
 }
 
+/* ---- بشرتي ---- */
+function skinStepRowHtml(step, checked, group){
+  return `<div class="skin-step-row" data-action="skinStepToggle" data-group="${group}" data-step="${step.id}">
+    <span class="skin-chk ${checked?"on":""}">${checked?"✓":""}</span>
+    <span class="skin-step-label ${step.mandatory?"skin-mandatory":""}">${esc(step.label)}</span>
+    ${step.mandatory?'<span class="skin-mandatory-tag">إلزامي</span>':""}
+  </div>`;
+}
+function buildSkinRetinalProgressHtml(s){
+  const weekNum=skinWeekNumber(s);
+  const pendingWeek=skinPendingIrritationWeek(s);
+  const nightsLabel = s.nightsPerWeek===1?"ليلة واحدة":s.nightsPerWeek===2?"ليلتان":s.nightsPerWeek+" ليالٍ";
+
+  const questionHtml = pendingWeek ? `
+    <div class="section-title">هل حدث تهيّج أو احمرار أو حرقة أو تقشّر هذا الأسبوع؟</div>
+    <div class="chips">
+      <button class="chip" data-action="skinIrritationAnswer" data-week="${pendingWeek}" data-val="true">نعم</button>
+      <button class="chip" data-action="skinIrritationAnswer" data-week="${pendingWeek}" data-val="false">لا</button>
+    </div>
+  ` : "";
+
+  const answeredWeeks=Object.keys(s.weeklyIrritation).sort();
+  const latestKey=answeredWeeks[answeredWeeks.length-1];
+  const latestAnswer = latestKey!==undefined ? s.weeklyIrritation[latestKey] : null;
+
+  let reactionHtml="";
+  if(latestAnswer===true){
+    reactionHtml=`
+      <div class="pattern-line" style="color:#7A4A63">قلّلي الريتينال وركّزي على المرطّب.</div>
+      <button class="btn ghost small" data-action="skinDecreaseNights">أنقصي ليلة</button>
+    `;
+  }else if(latestAnswer===false && s.nightsPerWeek<3){
+    const last3=answeredWeeks.slice(-3);
+    const allNo = last3.length===3 && last3.every(k=>s.weeklyIrritation[k]===false);
+    if(allNo && weekNum>=3){
+      reactionHtml=`
+        <div class="pattern-line" style="color:#4C6B52">بشرتكِ تتحمّل. تستطيعين الزيادة إلى ٣ ليالٍ.</div>
+        <button class="btn ghost small" data-action="skinIncreaseNights">زيدي إلى ٣ ليالٍ</button>
+      `;
+    }
+  }
+
+  return `
+    <div class="card">
+      <h3 style="margin-top:0">تدرّجي</h3>
+      <div class="pattern-line">الأسبوع ${weekNum} من الريتينال — ${nightsLabel} في الأسبوع</div>
+      ${questionHtml}
+      ${reactionHtml}
+    </div>
+  `;
+}
+function buildSkinPhotosHtml(){
+  const photos=loadSkinPhotos();
+  const galleryHtml = photos.length ? `
+    <div class="skin-photo-grid">
+      ${photos.map(p=>`<div class="skin-photo-item"><img src="${p.dataUrl}" alt=""><div class="skin-photo-date">${shortLabel(p.date)}</div></div>`).join("")}
+    </div>
+  ` : `<p class="muted">لا توجد صور بعد.</p>`;
+  return `
+    <div class="card">
+      <h3 style="margin-top:0">صورة الشهر</h3>
+      <div class="muted" style="font-size:12px; margin-bottom:10px">نفس الإضاءة ونفس المكان في كل مرة.</div>
+      <button class="btn ghost small" data-action="skinPhotoTrigger">صورة تتبّع</button>
+      <input type="file" accept="image/*" id="skinPhotoInput" data-action="skinPhotoUpload" style="display:none">
+      ${galleryHtml}
+    </div>
+  `;
+}
+function buildSkinTabHtml(){
+  const key=todayKey(); const day=getDay(key);
+  const s=skinSettings();
+  const retinalTonight=isRetinalNight(new Date());
+  const eveningSteps = retinalTonight ? SKIN_RETINAL_STEPS : SKIN_BRIGHTENING_STEPS;
+
+  const start=new Date(weekStartKey(new Date())+"T00:00:00");
+  const weekKeys=[]; for(let i=0;i<7;i++){ const d=new Date(start); d.setDate(d.getDate()+i); weekKeys.push(fmt(d)); }
+  const eyePatchCount = weekKeys.filter(k=>{ const d=state.days[k]; return d && d.skin && d.skin.eyePatch; }).length;
+
+  return `
+    <div class="card">
+      <h3 style="margin-top:0">صباحي</h3>
+      ${SKIN_MORNING_STEPS.map(st=>skinStepRowHtml(st, day.skin.morning[st.id], "morning")).join("")}
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">${retinalTonight?"ليلة ريتينال":"ليلة تفتيح"}</h3>
+      ${eveningSteps.map(st=>skinStepRowHtml(st, day.skin.evening[st.id], "evening")).join("")}
+      ${retinalTonight?`<div class="skin-retinal-warn">بلا أحماض مقشّرة الليلة · بلا ريتينول · لا يُقرَّب من خط الرموش</div>`:""}
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">الجسم</h3>
+      ${skinStepRowHtml(SKIN_BODY_STEP, day.skin.body, "body")}
+      <div class="muted" style="margin-top:6px; font-size:12px">بلا فرك · بلا أحماض إضافية</div>
+    </div>
+
+    <div class="card">
+      <div class="skin-step-row" data-action="skinEyePatchToggle">
+        <span class="skin-chk ${day.skin.eyePatch?"on":""}">${day.skin.eyePatch?"✓":""}</span>
+        <span class="skin-step-label">لصقة عين</span>
+      </div>
+      <div class="muted" style="font-size:12px; margin:6px 0 2px">${eyePatchCount} من 3 هذا الأسبوع</div>
+      <div class="muted" style="font-size:12px">للترطيب والانتفاخ فقط — ليست علاج الهالات.</div>
+    </div>
+
+    ${buildSkinRetinalProgressHtml(s)}
+    ${buildSkinPhotosHtml()}
+  `;
+}
+/* بطاقة «بشرتي» — تبويب التطوّر */
+function buildSkinStatsHtml(){
+  const s=skinSettings();
+  const days30=lastNDays(30);
+  let spfCount=0, bodyCount=0, retinalCount=0;
+  days30.forEach(k=>{
+    const d=state.days[k]; if(!d||!d.skin) return;
+    if(d.skin.morning && d.skin.morning.spf) spfCount++;
+    if(d.skin.body) bodyCount++;
+    if(d.skin.evening && d.skin.evening.retinal) retinalCount++;
+  });
+  return `
+    <div class="card">
+      <h3>🧴 بشرتي</h3>
+      <div class="pattern-line">الواقية: ${spfCount} يوماً من ${days30.length}</div>
+      <div class="pattern-line">ليالي الريتينال: ${retinalCount} في الشهر</div>
+      <div class="pattern-line">كريم الظهر: ${bodyCount} يوماً من ${days30.length}</div>
+      <div class="pattern-line">التقييم بعد ٨ إلى ١٢ أسبوعاً — أنتِ في الأسبوع ${skinWeekNumber(s)}</div>
+    </div>
+  `;
+}
+/* إعدادات بشرتي — تبويب أهدافي. التحذير أدناه ثابت لا يُخفى تحت أي شرط */
+function buildSkinSettingsHtml(){
+  const s=skinSettings();
+  const daysHtml = ALL_DAYS.map(d=>
+    `<button class="day ${s.retinalDays.includes(d)?"on":""}" data-action="skinRetinalDayToggle" data-day="${d}">${DAY_SHORT[d]}</button>`
+  ).join("");
+  return `
+    <div class="card">
+      <h3>🧴 بشرتي</h3>
+      <label class="fld" style="margin-top:0">أيام ليالي الريتينال</label>
+      <div class="days">${daysHtml}</div>
+      <div class="skin-pregnancy-warning">الحمل أو التخطيط له: يُوقَف الريتينال والريتينول.</div>
+    </div>
+  `;
+}
+
 function buildRecipesTabHtml(){
   return recipeDraft ? buildRecipeFormHtml() : buildRecipesListHtml();
 }
@@ -2111,6 +2566,30 @@ function buildRecipeFormHtml(){
 
 /* ---- تبويب: أولادي ---- */
 let showWeekReview = false; // هل شاشة المراجعة الأسبوعية مفتوحة؟
+let openKidDetail = {}; // اسم الطفل ← هل تفاصيله الثانوية مفتوحة؟ (مطوية افتراضياً)
+let ladderDraft = null; // مسوّدة إضافة مهارة جديدة لسلّم الانسحاب، أو null
+let tomorrowPickerOpen = false; // هل قائمة اختيار المهامّ في «ثلاثة أشياء لغد» مفتوحة؟
+let catchSheetOpen = false; // هل نافذة الالتقاط السريع مفتوحة؟
+let catchDraft = null; // مسوّدة الملاحظة الجاري تسجيلها، أو null
+let catchArchiveOpen = false; // هل قسم «الملاحظات المؤرشفة» مفتوح؟
+
+/* تأكيد الحذف بضغطتين: الأولى تحوّل ✕ إلى «حذف؟» لثانيتين، والثانية تنفّذ الحذف فعلياً */
+let deleteConfirmId = null;
+let deleteConfirmTimer = null;
+function requestDeleteConfirm(id){
+  if(deleteConfirmId===id) return true; // هذه الضغطة الثانية — نفّذي الحذف
+  deleteConfirmId=id;
+  clearTimeout(deleteConfirmTimer);
+  deleteConfirmTimer=setTimeout(()=>{ deleteConfirmId=null; renderCurrent(); }, 2000);
+  renderCurrent();
+  return false;
+}
+function deleteButtonHtml(action, id){
+  const confirming = deleteConfirmId===id;
+  return `<button class="kg-del ${confirming?"confirming":""}" data-action="${action}" data-id="${esc(id)}" title="حذف">${confirming?"حذف؟":"✕"}</button>`;
+}
+let respTipActive = null; // نصّ تلميح رأس العمود الظاهر حالياً بالضغط المطوّل، أو null
+let respTipTimer = null; // مؤقّت داخلي لاكتشاف الضغط المطوّل، ليس جزءاً من العرض
 
 function buildWeekReviewHtml(){
   const weekKey = weekStartKey(new Date());
@@ -2153,9 +2632,13 @@ function respKidsList(){
   return state.settings.respKids;
 }
 /* لبنات مشتركة بين «أولادي» و«ليلتي» — تُبنى مرة وتُستعمل في الشاشتين */
-function respTableHtml(day){
+/* opts.rowActions: أظهر زرّ «✓ الكل» في نهاية كل صفّ (تبويب «أولادي» فقط، لا «ليلتي») */
+function respTableHtml(day, opts){
+  opts = opts||{};
   const kids=respKidsList();
-  const headHtml=RESPONSIBILITIES.map(r=>`<div class="resp-th">${esc(r.short)}</div>`).join("");
+  const headHtml=RESPONSIBILITIES.map(r=>
+    `<div class="resp-th" data-tip="${esc(r.label)}" title="${esc(r.label)}">${r.icon}</div>`
+  ).join("");
   const rowsHtml=kids.map(name=>{
     const kidResp=day.resp[name]||{};
     const cells=RESPONSIBILITIES.map(r=>{
@@ -2164,13 +2647,19 @@ function respTableHtml(day){
       return `<div class="resp-cell" data-action="respCycle" data-kid="${esc(name)}" data-resp="${r.id}"
         ${color?`style="background:${color}; border-color:${color}"`:""}></div>`;
     }).join("");
-    return `<div class="resp-row"><div class="resp-name">${esc(name)}</div>${cells}</div>`;
+    const allBtn = opts.rowActions ? `<button class="resp-all-btn" data-action="respRowAll" data-kid="${esc(name)}">✓ الكل</button>` : "";
+    return `<div class="resp-row-wrap">
+      <div class="resp-row"><div class="resp-name">${esc(name)}</div>${cells}</div>
+      ${allBtn}
+    </div>`;
   }).join("");
   const legendHtml=RESP_STATES.map(s=>
     `<span class="resp-legend-item"><span class="resp-swatch" style="background:${s.color}"></span>${s.label}</span>`
   ).join("");
   const showAddSara = !kids.includes("سارة");
+  const tipHtml = respTipActive ? `<div class="resp-tip">${esc(respTipActive)}</div>` : "";
   return `
+    ${tipHtml}
     <div class="resp-table">
       <div class="resp-row resp-head"><div class="resp-name"></div>${headHtml}</div>
       ${rowsHtml}
@@ -2242,16 +2731,451 @@ function homeTogglesHtml(home){
   </div>`;
 }
 
-function buildRespWatchHtml(day){
+/* هل سُجّلت أي خانة في جدول اليوم؟ (لإظهار/إخفاء بطاقة «اليوم عندهم») */
+function respRecordedToday(day){
+  return respKidsList().some(name=>{
+    const kr=day.resp[name]; if(!kr) return false;
+    return RESPONSIBILITIES.some(r=>!!kr[r.id]);
+  });
+}
+/* بطاقة «اليوم عندهم» — ثلاثة أسطر محسوبة، لا تخترع تحسّناً غير موجود */
+/* جدول «لحظاتي معهم» — لمسة يومية مسمّاة لكل طفل، تُستعمل في «أولادي» و«ليلتي» */
+function buildTouchTableHtml(day){
+  const school=goesToSchoolSettings();
+  const headHtml = TOUCH_MOMENTS.map(m=>
+    `<div class="resp-th clickable" data-action="touchColumnFill" data-moment="${m.id}" data-tip="${esc(m.label)}" title="${esc(m.label)}">${m.icon}</div>`
+  ).join("");
+  const rowsHtml = KIDS.map(name=>{
+    const t=day.kids[name].touch;
+    const applicable = TOUCH_MOMENTS.filter(m=>!m.schoolOnly || school[name]);
+    const allDone = applicable.length>0 && applicable.every(m=>t[m.id]);
+    const cellsHtml = TOUCH_MOMENTS.map(m=>{
+      if(m.schoolOnly && !school[name]) return `<div class="touch-cell touch-na">—</div>`;
+      return `<div class="touch-cell ${t[m.id]?"on":""}" data-action="touchToggle" data-kid="${esc(name)}" data-moment="${m.id}"></div>`;
+    }).join("");
+    return `<div class="touch-row"><div class="resp-name">${esc(name)}${allDone?'<span class="touch-check">✓</span>':""}</div>${cellsHtml}</div>`;
+  }).join("");
+  const tipHtml = respTipActive ? `<div class="resp-tip">${esc(respTipActive)}</div>` : "";
   return `
     <div class="card">
-      <h3 style="margin-top:0">📋 مراقبة المسؤوليات</h3>
-      ${bagTimesHtml(day.home)}
-      ${respTableHtml(day)}
-      <label class="fld">كم دقيقة أصلحتُ ما تركوه اليوم؟</label>
-      ${cleanupChipsHtml(day.home)}
+      <h3 style="margin-top:0">لحظاتي معهم</h3>
+      ${tipHtml}
+      <div class="resp-table">
+        <div class="touch-row resp-head"><div class="resp-name"></div>${headHtml}</div>
+        ${rowsHtml}
+      </div>
     </div>
   `;
+}
+/* بطاقة «لحظاتي معهم — ١٤ يوماً» — تبويب التطوّر. أرقام فقط، بلا عدّاد إجمالي ولا سلسلة أيام */
+function buildTouchStatsHtml(){
+  const days14=lastNDays(14);
+  const school=goesToSchoolSettings();
+
+  const table={};
+  KIDS.forEach(name=>{
+    table[name]={};
+    TOUCH_MOMENTS.forEach(m=>{
+      if(m.schoolOnly && !school[name]){ table[name][m.id]=null; return; }
+      let count=0;
+      days14.forEach(k=>{
+        const d=state.days[k]; if(!d||!d.kids||!d.kids[name]||!d.kids[name].touch) return;
+        if(d.kids[name].touch[m.id]) count++;
+      });
+      table[name][m.id]=Math.round(count/days14.length*100);
+    });
+  });
+
+  const headHtml=TOUCH_MOMENTS.map(m=>`<div class="resp-th" data-tip="${esc(m.label)}" title="${esc(m.label)}">${m.icon}</div>`).join("");
+  const rowsHtml=KIDS.map(name=>{
+    const cells=TOUCH_MOMENTS.map(m=>{
+      const p=table[name][m.id];
+      return `<div class="growth-cell ${p==null?"":respGrowthClass(p)}">${p==null?"—":p+"٪"}</div>`;
+    }).join("");
+    return `<div class="touch-row"><div class="resp-name">${esc(name)}</div>${cells}</div>`;
+  }).join("");
+  const tipHtml = respTipActive ? `<div class="resp-tip">${esc(respTipActive)}</div>` : "";
+
+  let weakestMoment=null;
+  TOUCH_MOMENTS.forEach(m=>{
+    let total=0, count=0;
+    KIDS.forEach(name=>{
+      if(m.schoolOnly && !school[name]) return;
+      days14.forEach(k=>{
+        const d=state.days[k]; if(!d||!d.kids||!d.kids[name]||!d.kids[name].touch) return;
+        count++; if(d.kids[name].touch[m.id]) total++;
+      });
+    });
+    if(!count) return;
+    const pct=Math.round(total/count*100);
+    if(!weakestMoment || pct<weakestMoment.pct) weakestMoment={short:m.short, pct};
+  });
+
+  const kidPct={};
+  KIDS.forEach(name=>{
+    const applicable=TOUCH_MOMENTS.filter(m=>table[name][m.id]!=null);
+    kidPct[name]=applicable.length ? applicable.reduce((s,m)=>s+table[name][m.id],0)/applicable.length : null;
+  });
+  const validKids=KIDS.filter(name=>kidPct[name]!=null);
+  let lowestLine="";
+  if(validKids.length){
+    const maxP=Math.max(...validKids.map(n=>kidPct[n]));
+    const minP=Math.min(...validKids.map(n=>kidPct[n]));
+    if(maxP-minP>=15){
+      const lowestName=validKids.find(n=>kidPct[n]===minP);
+      lowestLine=`<div class="pattern-line">الأقلّ نصيباً: ${esc(lowestName)}</div>`;
+    }
+  }
+
+  return `
+    <div class="card">
+      <h3>🤝 لحظاتي معهم — ١٤ يوماً</h3>
+      ${tipHtml}
+      <div class="resp-table">
+        <div class="touch-row resp-head"><div class="resp-name"></div>${headHtml}</div>
+        ${rowsHtml}
+      </div>
+      ${weakestMoment?`<div class="pattern-line" style="margin-top:10px">أضعف لحظة عندكِ: ${esc(weakestMoment.short)} (${weakestMoment.pct}٪)</div>`:""}
+      ${lowestLine}
+    </div>
+  `;
+}
+function buildKidsTodayAssistantHtml(day){
+  if(!respRecordedToday(day)) return "";
+  const kids=respKidsList();
+
+  let topKid=null;
+  kids.forEach(name=>{
+    const kr=day.resp[name]||{};
+    const aloneCount=RESPONSIBILITIES.filter(r=>kr[r.id]==="alone").length;
+    if(aloneCount>0 && (!topKid || aloneCount>topKid.count)) topKid={name, count:aloneCount};
+  });
+  const topLine = topKid
+    ? `<div class="pattern-line">أعلى اليوم: ${esc(topKid.name)} — ${topKid.count} من ${RESPONSIBILITIES.length} ${KID_FEM[topKid.name]?"وحدها":"وحده"}</div>`
+    : "";
+
+  let hardest=null;
+  RESPONSIBILITIES.forEach(r=>{
+    let alone=0, recorded=0;
+    kids.forEach(name=>{
+      const st=(day.resp[name]||{})[r.id]; if(!st) return;
+      recorded++; if(st==="alone") alone++;
+    });
+    if(!recorded) return;
+    const pct=alone/recorded;
+    if(!hardest || pct<hardest.pct) hardest={label:r.label, pct};
+  });
+  const hardestLine = hardest ? `<div class="pattern-line">الأصعب اليوم على الجميع: ${esc(hardest.label)}</div>` : "";
+
+  const todayKeyStr=todayKey();
+  let bestImprovement=null;
+  kids.forEach(name=>{
+    RESPONSIBILITIES.forEach(r=>{
+      const todaySt=(day.resp[name]||{})[r.id];
+      if(todaySt!=="alone") return;
+      let streak=0;
+      for(let i=1;i<=60;i++){
+        const d=new Date(todayKeyStr+"T00:00:00"); d.setDate(d.getDate()-i);
+        const pastDay=state.days[fmt(d)];
+        const pastSt = pastDay && pastDay.resp && pastDay.resp[name] ? pastDay.resp[name][r.id] : undefined;
+        if(pastSt==="alone") break; // كانت خضراء سابقاً — لا تحسّن هنا فعلياً
+        if(!pastSt) break; // لا سجلّ صريح لهذا اليوم — لا دليل كافياً، فلا تخترعي تحسّناً
+        streak++;
+      }
+      if(streak>=3 && (!bestImprovement || streak>bestImprovement.streak)){
+        bestImprovement={name, label:r.label, streak};
+      }
+    });
+  });
+  const improvementLine = bestImprovement
+    ? `<div class="pattern-line">تحسّن: ${esc(bestImprovement.name)} ${esc(bestImprovement.label)} وحده لأول مرة منذ ${bestImprovement.streak} أيام</div>`
+    : "";
+
+  return `
+    <div class="card">
+      <h3 style="margin-top:0">اليوم عندهم</h3>
+      ${topLine}
+      ${hardestLine}
+      ${improvementLine}
+    </div>
+  `;
+}
+
+/* سلّم الانسحاب — كم يوماً على الطفل وهو على درجته الحالية */
+function ladderDaysOnLevel(skill){
+  const since = skill.lastUp || skill.createdAt;
+  return daysBetween(since, todayKey());
+}
+function isSameMonth(dateKeyStr, refKeyStr){
+  return dateKeyStr.slice(0,7) === refKeyStr.slice(0,7);
+}
+/* قائمة سلّم المهارات + نموذج «مهارة جديدة» — مشتركة بين تبويب «أولادي» وشاشة «ليلتي» */
+function buildLadderHtml(){
+  const ladder=loadLadder();
+  const rowsHtml = ladder.map(s=>{
+    const dotsHtml = [1,2,3,4,5].map(n=>
+      `<span class="ladder-dot ${n<=s.level?"on":""}"></span>`
+    ).join("");
+    const days=ladderDaysOnLevel(s);
+    return `<div class="ladder-row">
+      <div class="ladder-head">
+        <span class="ladder-name">${esc(s.name)} <span class="muted">— ${esc(s.kid)}</span></span>
+        <div class="ladder-btns">
+          <button class="ladder-btn" data-action="ladderDown" data-id="${s.id}" ${s.level<=1?"disabled":""}>↓</button>
+          <button class="ladder-btn" data-action="ladderUp" data-id="${s.id}" ${s.level>=5?"disabled":""}>↑</button>
+        </div>
+      </div>
+      <div class="ladder-dots">${dotsHtml}</div>
+      <div class="ladder-level-label">${esc(LADDER_LEVELS[s.level-1])}</div>
+      <div class="muted" style="font-size:11px">على هذه الدرجة منذ ${days} ${days===1?"يوم":"أيام"}</div>
+    </div>`;
+  }).join("") || `<p class="muted">لا توجد مهارات مضافة بعد.</p>`;
+
+  const formHtml = ladderDraft ? `
+    <div class="ladder-form">
+      <label class="fld" style="margin-top:0">اسم المهارة</label>
+      <input type="text" data-action="ladderDraftField" data-field="name" value="${esc(ladderDraft.name)}" placeholder="مثال: ترتيب الحقيبة">
+      <label class="fld">الطفل</label>
+      <select data-action="ladderDraftField" data-field="kid">
+        ${KIDS.map(k=>`<option value="${esc(k)}" ${ladderDraft.kid===k?"selected":""}>${esc(k)}</option>`).join("")}
+      </select>
+      <label class="fld">الدرجة الابتدائية</label>
+      <select data-action="ladderDraftField" data-field="level">
+        ${[1,2,3,4,5].map(n=>`<option value="${n}" ${+ladderDraft.level===n?"selected":""}>${n} — ${esc(LADDER_LEVELS[n-1])}</option>`).join("")}
+      </select>
+      <div class="row" style="margin-top:12px">
+        <button class="btn small" data-action="ladderDraftSave">حفظ</button>
+        <button class="btn ghost small" data-action="ladderDraftCancel">إلغاء</button>
+      </div>
+    </div>
+  ` : "";
+
+  return `
+    <div class="card">
+      <div class="row" style="align-items:center; margin:0">
+        <h3 style="margin:0; flex:1">🎓 دوري كمعلّمة</h3>
+        ${!ladderDraft?`<button class="btn ghost small grow0" data-action="ladderAddStart">مهارة جديدة</button>`:""}
+      </div>
+      <div class="section-title" style="margin-top:12px">سلّم الانسحاب</div>
+      ${formHtml}
+      ${rowsHtml}
+    </div>
+  `;
+}
+/* عدّادان يوميان — شاشة «ليلتي» فقط */
+function buildTeacherNightHtml(day){
+  const home=day.home;
+  const counterRow=(field,label)=>`
+    <div class="night-h" style="margin-top:14px">${label}</div>
+    <div class="chips">${INTERFERE_OPTIONS.map(n=>
+      `<button class="chip ${home[field]===n?"on":""}" data-action="homeCounter" data-field="${field}" data-val="${n}">${n===6?"أكثر":n}</button>`
+    ).join("")}</div>`;
+  return `
+    <div class="card">
+      ${counterRow("interfered","تدخّلتُ قبل أن يحاول")}
+      ${counterRow("didItFor","فعلتُها عنه لأنني مستعجلة")}
+      <label class="fld" style="color:#4C6B52; font-weight:700">ما الذي كففتُ عن فعله عنهم اليوم؟</label>
+      <input type="text" data-action="stoppedDoing" value="${esc(home.stoppedDoing)}" placeholder="اكتبي إن أردتِ..." style="border-color:#4C6B52">
+    </div>
+  `;
+}
+
+/* قائمة الغد — البنود المتبقّية من قائمة اليوم غير المنجَزة، مع خياري النقل والشطب */
+function buildUnfinishedTodayHtml(){
+  const store=loadTomorrow();
+  const items=store[todayKey()];
+  if(!items) return "";
+  const rows = items.map((it,idx)=>({...it, idx})).filter(it=>it.t && it.t.trim() && !it.done);
+  if(!rows.length) return "";
+  return rows.map(it=>`
+    <div class="tomorrow-unfinished-row">
+      <div class="tomorrow-unfinished-text">${esc(it.t)}</div>
+      <div class="chips">
+        <button class="chip" data-action="tomorrowMove" data-idx="${it.idx}">انقليها لغد</button>
+        <button class="chip" data-action="tomorrowStrike" data-idx="${it.idx}">اشطبيها</button>
+      </div>
+      ${it.moved>=3?`<div class="tomorrow-moved-warn">انتقلت ${it.moved} مرات · <em>هل هي مهمّة فعلاً؟</em></div>`:""}
+    </div>
+  `).join("");
+}
+/* قسم «ثلاثة أشياء لغد» — أسفل شاشة «ليلتي» مباشرة قبل زرّ الإغلاق */
+function buildTomorrowWriteHtml(){
+  const tKey=tomorrowKey();
+  const store=loadTomorrow();
+  const items=ensureTomorrowSlot(store, tKey);
+
+  const fieldsHtml=[0,1,2].map(i=>`
+    <div class="tomorrow-field-row">
+      <span class="tomorrow-num">${i+1}</span>
+      <input type="text" data-action="tomorrowField" data-idx="${i}" value="${esc(items[i].t)}" placeholder="اكتبي...">
+    </div>
+  `).join("");
+
+  const pending=loadItems().filter(it=>!it.d);
+  const pickerHtml = tomorrowPickerOpen ? `
+    <div class="tomorrow-picker">
+      ${pending.length ? pending.map(it=>
+        `<div class="tomorrow-picker-item" data-action="tomorrowPickItem" data-text="${esc(it.x)}">${esc(it.x)}</div>`
+      ).join("") : `<p class="muted">لا توجد مهامّ معلّقة.</p>`}
+    </div>
+  ` : "";
+
+  return `
+    <div class="card">
+      <div class="night-h">ثلاثة أشياء لغد</div>
+      ${buildUnfinishedTodayHtml()}
+      ${fieldsHtml}
+      <button class="btn ghost small" data-action="tomorrowTogglePicker">اختاري من مهامّي</button>
+      ${pickerHtml}
+    </div>
+  `;
+}
+/* بطاقة «كتبتِ لنفسكِ أمس» — أعلى تبويب «اليوم»، منفصلة عن حساب الأصعدة */
+function buildTomorrowReadHtml(){
+  const store=loadTomorrow();
+  const items=store[todayKey()];
+  const realItems = items ? items.filter(x=>x.t && x.t.trim()) : [];
+  if(!realItems.length) return "";
+  const allDone = realItems.every(x=>x.done);
+  if(allDone) return `<div class="card tomorrow-read-card tomorrow-collapsed">الثلاثة ✓</div>`;
+  const rowsHtml = items.map((it,idx)=>{
+    if(!it.t || !it.t.trim()) return "";
+    return `<div class="tomorrow-check-row" data-action="tomorrowToggleDone" data-idx="${idx}">
+      <span class="tomorrow-chk ${it.done?"on":""}">${it.done?"✓":""}</span>
+      <span class="${it.done?"tomorrow-done-text":""}">${esc(it.t)}</span>
+    </div>`;
+  }).join("");
+  return `
+    <div class="card tomorrow-read-card">
+      <div class="night-h">كتبتِ لنفسكِ أمس</div>
+      ${rowsHtml}
+    </div>
+  `;
+}
+/* بطاقة «قوائم الغد» — تبويب التطوّر */
+function buildTomorrowStatsHtml(){
+  const days14=lastNDays(14);
+  const store=loadTomorrow();
+  let nightsWritten=0, totalItems=0, doneItems=0;
+  days14.forEach(k=>{
+    const items=store[k]; if(!items) return;
+    const real=items.filter(x=>x.t && x.t.trim());
+    if(real.length) nightsWritten++;
+    totalItems+=real.length;
+    doneItems+=real.filter(x=>x.done).length;
+  });
+  if(!nightsWritten) return "";
+
+  let mostMoved=null;
+  Object.keys(store).forEach(k=>{
+    (store[k]||[]).forEach(it=>{
+      if(it.t && it.t.trim() && it.moved>=3 && (!mostMoved || it.moved>mostMoved.moved)){
+        mostMoved={text:it.t, moved:it.moved};
+      }
+    });
+  });
+
+  return `
+    <div class="card">
+      <h3>🌙 قوائم الغد</h3>
+      <div class="pattern-line">كتبتِ ${nightsWritten} ليلة من ${days14.length}</div>
+      <div class="pattern-line">أنجزتِ ${doneItems} بنداً من ${totalItems}</div>
+      ${mostMoved?`<div class="pattern-line">أكثر بند انتقل: ${esc(mostMoved.text)} (${mostMoved.moved} مرات)</div>`:""}
+    </div>
+  `;
+}
+
+/* بطاقة «للمتابعة معهم» — أعلى تبويب «اليوم»، فقط البنود التي حان وقتها */
+function buildCatchDueCardHtml(){
+  const due=loadCatch().filter(c=>!c.archived && catchIsDueNow(c.when));
+  if(!due.length) return "";
+  const rowsHtml=due.map(c=>`
+    <div class="catch-row">
+      <div class="catch-text"><strong>${esc(c.kid)}</strong> — ${esc(c.text)}</div>
+      <div class="chips">
+        <button class="chip" data-action="catchDone" data-id="${c.id}">✓ تابعتُها</button>
+        <button class="chip" data-action="catchDefer" data-id="${c.id}">↻ أجّليها</button>
+        <button class="chip" data-action="catchDismiss" data-id="${c.id}">✕ اشطبيها</button>
+      </div>
+    </div>
+  `).join("");
+  return `
+    <div class="card catch-due-card">
+      <h3 style="margin-top:0">للمتابعة معهم</h3>
+      ${rowsHtml}
+    </div>
+  `;
+}
+/* نافذة الالتقاط السريع (bottom sheet) — عنصر ثابت خارج #view، يُبنى في فتحة خاصة به */
+function buildCatchSheetHtml(){
+  if(!catchSheetOpen || !catchDraft) return "";
+  return `
+    <div class="catch-overlay" data-action="catchCancel">
+      <div class="catch-sheet" data-action="catchSheetNoop">
+        <input type="text" id="catchTextInput" data-action="catchTextField" value="${esc(catchDraft.text)}" placeholder="شو لاحظتِ؟">
+        <div class="chips">
+          ${CATCH_KID_OPTIONS.map(k=>`<button class="chip ${catchDraft.kid===k?"on":""}" data-action="catchKidField" data-val="${esc(k)}">${esc(k)}</button>`).join("")}
+        </div>
+        <div class="chips">
+          ${CATCH_WHEN.map(w=>`<button class="chip ${catchDraft.when===w.id?"on":""}" data-action="catchWhenField" data-val="${w.id}">${esc(w.label)}</button>`).join("")}
+        </div>
+        <div class="row" style="margin-top:14px">
+          <button class="btn small" data-action="catchSave">حفظ</button>
+          <button class="btn ghost small" data-action="catchCancel">إلغاء</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function renderCatchSheet(){
+  const slot=document.getElementById("catchSheetSlot");
+  if(slot) slot.innerHTML = buildCatchSheetHtml();
+}
+/* قسم «الملاحظات المؤرشفة» — تبويب «أهدافي»، مطوي افتراضياً */
+function buildCatchArchiveHtml(){
+  const archived=loadCatch().filter(c=>c.archived).sort((a,b)=>b.created-a.created).slice(0,20);
+  return `
+    <div class="card">
+      <div class="row" style="align-items:center; margin:0; cursor:pointer" data-action="catchArchiveToggle">
+        <h3 style="margin:0; flex:1">📋 الملاحظات المؤرشفة</h3>
+        <span class="kid-detail-arrow">${catchArchiveOpen?"▲":"▼"}</span>
+      </div>
+      ${catchArchiveOpen ? `
+        ${archived.length ? archived.map(c=>`
+          <div class="catch-archive-row"><strong>${esc(c.kid)}</strong> — ${esc(c.text)} <span class="muted">· ${esc(catchWhenLabel(c.when))}</span></div>
+        `).join("") : `<p class="muted">لا توجد ملاحظات مؤرشفة بعد.</p>`}
+        ${archived.length?`<button class="btn ghost small" data-action="catchArchiveClear" style="margin-top:10px">امسحيها كلها</button>`:""}
+      ` : ""}
+    </div>
+  `;
+}
+
+/* تصدير جدول مسؤوليات الأولاد بالكامل كملف CSV */
+function exportKidsRespCSV(){
+  const rows=[["التاريخ","الطفل","المسؤولية","الحالة"]];
+  const respLabel=id=>{ const r=RESPONSIBILITIES.find(x=>x.id===id); return r?r.label:id; };
+  const stLabel=id=>{ const s=RESP_STATES.find(x=>x.id===id); return s?s.label:id; };
+  Object.keys(state.days).sort().forEach(dateKey=>{
+    const d=state.days[dateKey]; if(!d||!d.resp) return;
+    Object.keys(d.resp).forEach(name=>{
+      const kr=d.resp[name];
+      Object.keys(kr).forEach(rid=>{
+        const st=kr[rid]; if(!st) return;
+        rows.push([dateKey, name, respLabel(rid), stLabel(st)]);
+      });
+    });
+  });
+  const csvEscape=v=>{
+    const s=String(v);
+    return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+  };
+  const csv="﻿"+rows.map(r=>r.map(csvEscape).join(",")).join("\r\n");
+  const blob=new Blob([csv], {type:"text/csv;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url; a.download="mutabaati-kids-"+todayKey()+".csv";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 function renderKids(){
@@ -2262,12 +3186,11 @@ function renderKids(){
 
   const todayWd = weekdayOf(key);
   const needsReview = todayWd>=5 && !weekReviewFilled(weekStartKey(new Date()));
+  const schoolSettings = goesToSchoolSettings();
 
-  const home = day.home;
-  const authority = home.authority;
-
-  const cards = KIDS.map(name=>{
+  const kidDetailsHtml = KIDS.map(name=>{
     const k=day.kids[name];
+    const isOpen = !!openKidDetail[name];
     const chip=(field,label,cls)=>`<button class="chip ${cls||""} ${k[field]?"on":""}" data-action="kidToggle" data-kid="${esc(name)}" data-field="${field}">${label}</button>`;
     const multiChipRow=(field,label,options)=>`
       <label class="fld">${label}</label>
@@ -2284,42 +3207,53 @@ function renderKids(){
       <label class="fld">ماذا أفعل المرة القادمة؟</label>
       <textarea data-action="kidNext" data-kid="${esc(name)}">${esc(k.next)}</textarea>` : "";
 
-    const mine=allItems.filter(it=>it.o===name);
-    const pending=mine.filter(it=>!it.d);
-    const done=mine.filter(it=>it.d).sort((a,b)=>(b.dt||"").localeCompare(a.dt||"")).slice(0,4);
+    let bodyHtml="";
+    if(isOpen){
+      const mine=allItems.filter(it=>it.o===name);
+      const pending=mine.filter(it=>!it.d);
+      const done=mine.filter(it=>it.d).sort((a,b)=>(b.dt||"").localeCompare(a.dt||"")).slice(0,4);
+      const pendingHtml = pending.length ? pending.map(it=>`
+        <div class="kg-item" data-action="kgDone" data-id="${it.id}">
+          <div class="kg-chk"></div>
+          <div class="kg-text">${esc(it.x)}</div>
+          ${deleteButtonHtml("kgDel", it.id)}
+        </div>`).join("") : `<div class="kg-empty">لا توجد أهداف بعد.</div>`;
+      const doneHtml = done.map(it=>`
+        <div class="kg-item done">
+          <div class="kg-chk">✓</div>
+          <div class="kg-text">${esc(it.x)}</div>
+          ${deleteButtonHtml("kgDel", it.id)}
+        </div>`).join("");
 
-    const pendingHtml = pending.length ? pending.map(it=>`
-      <div class="kg-item" data-action="kgDone" data-id="${it.id}">
-        <div class="kg-chk"></div>
-        <div class="kg-text">${esc(it.x)}</div>
-        <button class="kg-del" data-action="kgDel" data-id="${it.id}" title="حذف">✕</button>
-      </div>`).join("") : `<div class="kg-empty">لا توجد أهداف بعد.</div>`;
+      bodyHtml = `
+        <div class="chips" style="margin-top:10px">
+          ${chip("special","٥ دقائق له وحده")}
+          ${chip("scolded","وبّختُه","scold")}
+        </div>
+        ${scoldFields}
+        <div class="goal-row-top" style="margin-top:14px">
+          <span class="goal-name ${schoolSettings[name]?"on":""}">يذهب إلى المدرسة</span>
+          <button class="toggle ${schoolSettings[name]?"on":""}" data-action="goesToSchoolToggle" data-kid="${esc(name)}" role="switch" aria-checked="${schoolSettings[name]}"><span class="knob"></span></button>
+        </div>
+        <label class="fld">ملاحظة عنه اليوم</label>
+        <textarea data-action="kidNote" data-kid="${esc(name)}" placeholder="اكتبي إن أردتِ...">${esc(k.note)}</textarea>
 
-    const doneHtml = done.map(it=>`
-      <div class="kg-item done">
-        <div class="kg-chk">✓</div>
-        <div class="kg-text">${esc(it.x)}</div>
-        <button class="kg-del" data-action="kgDel" data-id="${it.id}" title="حذف">✕</button>
-      </div>`).join("");
+        <div class="section-title" style="margin-top:16px">أهدافي معه</div>
+        <div class="kg-list">${pendingHtml}</div>
+        <div class="row" data-kid-row="${esc(name)}">
+          <input type="text" placeholder="هدف جديد...">
+          <button class="btn small grow0" data-action="kidGoalAdd" data-kid="${esc(name)}">إضافة</button>
+        </div>
+        ${doneHtml?`<div class="kg-list kg-done-list">${doneHtml}</div>`:""}
+      `;
+    }
 
-    return `<div class="card">
-      <div class="kid-head">
-        <div class="kid-badge">${esc(name[0])}</div>
-        <h3 style="margin:0">${esc(name)}</h3>
+    return `<div class="card kid-detail-card">
+      <div class="kid-detail-head" data-action="toggleKidDetail" data-kid="${esc(name)}">
+        <span>${esc(name)}</span>
+        <span class="kid-detail-arrow">${isOpen?"▲":"▼"}</span>
       </div>
-      <div class="chips">
-        ${chip("special","٥ دقائق له وحده")}
-        ${chip("scolded","وبّختُه","scold")}
-      </div>
-      ${scoldFields}
-
-      <div class="section-title" style="margin-top:16px">أهدافي معه</div>
-      <div class="kg-list">${pendingHtml}</div>
-      <div class="row" data-kid-row="${esc(name)}">
-        <input type="text" placeholder="هدف جديد...">
-        <button class="btn small grow0" data-action="kidGoalAdd" data-kid="${esc(name)}">إضافة</button>
-      </div>
-      ${doneHtml?`<div class="kg-list kg-done-list">${doneHtml}</div>`:""}
+      ${bodyHtml}
     </div>`;
   }).join("");
 
@@ -2333,20 +3267,24 @@ function renderKids(){
       </div>
     </div>
 
+    ${buildKidsTodayAssistantHtml(day)}
+    ${buildTouchTableHtml(day)}
+
     <div class="card">
-      <h3 style="margin-top:0">🏠 البيت اليوم</h3>
-      <div class="chips">
-        <button class="chip ${home.group?"on":""}" data-action="homeToggle" data-field="group">نشاط جماعي مع الجميع</button>
-        <button class="chip ${home.threat?"on":""}" data-action="homeToggle" data-field="threat">هدّدتُ اليوم</button>
-        <button class="chip ${authority.happened?"on":""}" data-action="homeAuthorityToggle">صدر منّي تصرّف أضعف موقفي</button>
+      <div class="row" style="margin-bottom:12px">
+        <button class="btn ghost small" data-action="respCopyYesterday">نسخ أمس</button>
+        <button class="btn ghost small" data-action="respClearToday">مسح اليوم</button>
       </div>
-      ${homeThreatFieldsHtml(home)}
-      ${authorityFieldsHtml(authority)}
+      ${respTableHtml(day, {rowActions:true})}
     </div>
 
-    ${buildRespWatchHtml(day)}
+    ${buildLadderHtml()}
 
-    ${cards}
+    ${kidDetailsHtml}
+
+    <div class="card">
+      <button class="btn ghost small" data-action="exportKidsCSV">⬇️ تصدير جدول الأولاد</button>
+    </div>
   `;
 }
 
@@ -2505,7 +3443,43 @@ function fmtDuration(totalMin){
   if(m>0) parts.push(`${m} دقيقة`);
   return parts.length ? parts.join(" و") : "0 دقيقة";
 }
-function buildRespStatsHtml(){
+/* أول تاريخ سُجّلت فيه أي خانة مسؤولية على الإطلاق — لبوّابة «مرّ ١٤ يوماً» */
+function firstRespDateKey(){
+  const keys=Object.keys(state.days).filter(k=>{
+    const d=state.days[k]; if(!d||!d.resp) return false;
+    return Object.values(d.resp).some(kr=>kr && Object.values(kr).some(Boolean));
+  }).sort();
+  return keys.length ? keys[0] : null;
+}
+/* نسبة «وحده» لطفل عبر مجموعة تواريخ مُعطاة، بين كل المسؤوليات المسجَّلة */
+function kidAlonePct(name, dateKeys){
+  let alone=0, recorded=0;
+  dateKeys.forEach(k=>{
+    const d=state.days[k]; if(!d||!d.resp) return;
+    const kr=d.resp[name]; if(!kr) return;
+    RESPONSIBILITIES.forEach(r=>{
+      const st=kr[r.id]; if(!st) return;
+      recorded++; if(st==="alone") alone++;
+    });
+  });
+  return recorded ? Math.round(alone/recorded*100) : null;
+}
+function weekDateKeys(weeksAgo){
+  const start=new Date(weekStartKey(new Date())+"T00:00:00");
+  start.setDate(start.getDate()-7*weeksAgo);
+  const keys=[];
+  for(let i=0;i<7;i++){ const d=new Date(start); d.setDate(d.getDate()+i); keys.push(fmt(d)); }
+  return keys;
+}
+function respGrowthClass(pct){
+  if(pct==null) return "";
+  if(pct<30) return "low";
+  if(pct<=70) return "mid";
+  return "high";
+}
+
+/* بطاقة «نموّهم» — نسبة الاستقلالية لكل طفل ومسؤولية، والأقوى/الأضعف، ومقارنة أسبوعية */
+function buildKidsGrowthHtml(){
   const last14=lastNDays(14);
   const kids=respKidsList();
   const daysWithResp=last14.filter(k=>{
@@ -2514,10 +3488,9 @@ function buildRespStatsHtml(){
     return kids.some(n=>d.resp[n] && Object.keys(d.resp[n]).length>0);
   }).length;
   if(daysWithResp<7){
-    return `<div class="card"><h3>📋 من يتحمّل مسؤوليته؟</h3><p class="muted">سجّلي سبعة أيام أولاً.</p></div>`;
+    return `<div class="card"><h3>🌱 نموّهم</h3><p class="muted">سجّلي سبعة أيام أولاً.</p></div>`;
   }
 
-  // عدّ «وحده» مقابل الأيام المسجّلة، لكل طفل ولكل مسؤولية
   const tally={};
   kids.forEach(n=>{ tally[n]={}; RESPONSIBILITIES.forEach(r=>{ tally[n][r.id]={alone:0, recorded:0}; }); });
   last14.forEach(k=>{
@@ -2533,67 +3506,160 @@ function buildRespStatsHtml(){
   });
   const pctOf=(a,b)=> b? Math.round(a/b*100) : null;
 
+  // أ. جدول النسب المُلوَّن
+  const headHtml=RESPONSIBILITIES.map(r=>
+    `<div class="resp-th" data-tip="${esc(r.label)}" title="${esc(r.label)}">${r.icon}</div>`
+  ).join("");
   const rowsHtml=kids.map(n=>{
-    const parts=RESPONSIBILITIES.map(r=>{
-      const t=tally[n][r.id];
-      const p=pctOf(t.alone, t.recorded);
-      return `${esc(r.short)} ${p==null?"—":p+"٪"}`;
-    }).join(" · ");
-    return `<div class="resp-stat-row"><span class="resp-stat-name">${esc(n)}</span> — ${parts}</div>`;
+    const cells=RESPONSIBILITIES.map(r=>{
+      const p=pctOf(tally[n][r.id].alone, tally[n][r.id].recorded);
+      return `<div class="growth-cell ${respGrowthClass(p)}">${p==null?"—":p+"٪"}</div>`;
+    }).join("");
+    return `<div class="growth-row"><div class="resp-name">${esc(n)}</div>${cells}</div>`;
+  }).join("");
+  const tipHtml = respTipActive ? `<div class="resp-tip">${esc(respTipActive)}</div>` : "";
+
+  // ب. الأقوى والأضعف لكل طفل
+  const strongWeakHtml = kids.map(n=>{
+    let best=null, worst=null;
+    RESPONSIBILITIES.forEach(r=>{
+      const p=pctOf(tally[n][r.id].alone, tally[n][r.id].recorded);
+      if(p==null) return;
+      if(!best || p>best.p) best={label:r.label, p};
+      if(!worst || p<worst.p) worst={label:r.label, p};
+    });
+    if(!best) return "";
+    return `<div class="pattern-line">${esc(n)} — الأقوى: ${esc(best.label)} (${best.p}٪) · الأضعف: ${esc(worst.label)} (${worst.p}٪)</div>`;
   }).join("");
 
-  // الأعلى تحمّلاً بين الأولاد
-  let bestKid=null;
-  kids.forEach(n=>{
-    let alone=0, rec=0;
-    RESPONSIBILITIES.forEach(r=>{ alone+=tally[n][r.id].alone; rec+=tally[n][r.id].recorded; });
-    if(!rec) return;
-    const p=Math.round(alone/rec*100);
-    if(!bestKid || p>bestKid.p) bestKid={name:n, p};
-  });
-  const bestLine = bestKid
-    ? `<div class="pattern-line">الأعلى تحمّلاً: ${esc(bestKid.name)} (${bestKid.p}٪ ${KID_FEM[bestKid.name]?"وحدها":"وحده"})</div>` : "";
-
-  // الأصعب على الجميع
-  let hardest=null;
-  RESPONSIBILITIES.forEach(r=>{
-    let alone=0, rec=0;
-    kids.forEach(n=>{ alone+=tally[n][r.id].alone; rec+=tally[n][r.id].recorded; });
-    if(!rec) return;
-    const p=Math.round(alone/rec*100);
-    if(!hardest || p<hardest.p) hardest={label:r.label, p};
-  });
-  const hardestLine = hardest
-    ? `<div class="pattern-line">الأصعب على الجميع: ${esc(hardest.label)} (${hardest.p}٪ وحدهم)</div>` : "";
-
-  // متوسط تأخير الحقيبة
-  let delaySum=0, delayCount=0;
-  last14.forEach(k=>{
-    const d=state.days[k]; if(!d||!d.home) return;
-    const due=parseHM(d.home.bagDue), done=parseHM(d.home.bagDone);
-    if(due==null || done==null) return; // حقل غير مملوء — لا يدخل في المتوسط
-    delaySum+=(done-due)*60; delayCount++;
-  });
-  const delayLine = delayCount
-    ? `<div class="pattern-line">متوسط تأخير الحقيبة: ${fmtDuration(delaySum/delayCount)}</div>` : "";
-
-  // أصلحتُ بعدهم
-  let cleanupSum=0;
-  last14.forEach(k=>{
-    const d=state.days[k];
-    if(d&&d.home&&typeof d.home.myCleanup==="number") cleanupSum+=d.home.myCleanup;
-  });
-  const cleanupLine = cleanupSum
-    ? `<div class="pattern-line resp-cleanup-line">أصلحتُ بعدهم: ${fmtDuration(cleanupSum)} في ${last14.length} يوماً</div>` : "";
+  // د. مقارنة أسبوعية — لا تظهر قبل مرور ١٤ يوماً على أول تسجيل
+  const firstKey=firstRespDateKey();
+  const daysSinceStart = firstKey ? daysBetween(firstKey, todayKey()) : 0;
+  let weeklyCompareHtml="";
+  if(daysSinceStart>=14){
+    const thisWeekKeys=weekDateKeys(0), lastWeekKeys=weekDateKeys(1);
+    const lines=kids.map(n=>{
+      const cur=kidAlonePct(n, thisWeekKeys), prev=kidAlonePct(n, lastWeekKeys);
+      if(cur==null || prev==null) return "";
+      const arrow = cur>prev ? "↑" : cur<prev ? "↓" : "=";
+      return `<div class="pattern-line">${esc(n)} — هذا الأسبوع ${cur}٪ ${arrow} الأسبوع الماضي ${prev}٪</div>`;
+    }).join("");
+    weeklyCompareHtml = lines ? `<div class="section-title">مقارنة أسبوعية</div>${lines}` : "";
+  }
 
   return `
     <div class="card">
-      <h3>📋 من يتحمّل مسؤوليته؟</h3>
+      <h3>🌱 نموّهم</h3>
+      ${tipHtml}
+      <div class="resp-table">
+        <div class="growth-row resp-head"><div class="resp-name"></div>${headHtml}</div>
+        ${rowsHtml}
+      </div>
+      ${strongWeakHtml}
+      ${weeklyCompareHtml}
+    </div>
+  `;
+}
+
+/* بطاقة «خطوتي التالية» — أعلى مسؤولية بعدد «بتذكير» لكل طفل، لأنها الأقرب للاستقلال */
+function buildKidsNextStepHtml(){
+  const last14=lastNDays(14);
+  const kids=respKidsList();
+  const daysWithResp=last14.filter(k=>{
+    const d=state.days[k];
+    if(!d||!d.resp) return false;
+    return kids.some(n=>d.resp[n] && Object.keys(d.resp[n]).length>0);
+  }).length;
+  if(daysWithResp<7){
+    return `<div class="card"><h3>🪜 خطوتي التالية</h3><p class="muted">سجّلي سبعة أيام أولاً.</p></div>`;
+  }
+
+  const remindedCount={};
+  kids.forEach(n=>{ remindedCount[n]={}; RESPONSIBILITIES.forEach(r=>{ remindedCount[n][r.id]=0; }); });
+  last14.forEach(k=>{
+    const d=state.days[k]; if(!d||!d.resp) return;
+    kids.forEach(n=>{
+      const kr=d.resp[n]; if(!kr) return;
+      RESPONSIBILITIES.forEach(r=>{ if(kr[r.id]==="reminded") remindedCount[n][r.id]++; });
+    });
+  });
+
+  const linesHtml=kids.map(n=>{
+    let top=null;
+    RESPONSIBILITIES.forEach(r=>{
+      const c=remindedCount[n][r.id];
+      if(c>0 && (!top || c>top.count)) top={label:r.label, count:c};
+    });
+    if(!top) return "";
+    const verb = KID_FEM[n] ? "درّبيها" : "درّبيه";
+    const suffix = KID_FEM[n] ? "لتستقلّ" : "ليستقلّ";
+    return `<div class="pattern-line">${esc(n)} — ${esc(top.label)}: ${top.count} مرات بتذكير. ${verb} ٧ أيام ${suffix} بها.</div>`;
+  }).join("");
+
+  return `
+    <div class="card">
+      <h3>🪜 خطوتي التالية</h3>
+      ${linesHtml || `<p class="muted">لا توجد مسؤولية تحتاج تدريباً إضافياً حالياً.</p>`}
+    </div>
+  `;
+}
+
+/* بطاقة «انسحابي» — تدخّلي مقابل استقلالهم آخر ١٤ يوماً */
+function buildWithdrawalHtml(){
+  const days14=lastNDays(14);
+  const labels=days14.map(shortLabel);
+  const interfered=days14.map(k=>{
+    const d=state.days[k];
+    return (d&&d.home&&typeof d.home.interfered==="number") ? d.home.interfered : 0;
+  });
+  const didItForSum = days14.reduce((sum,k)=>{
+    const d=state.days[k];
+    return sum + ((d&&d.home&&typeof d.home.didItFor==="number") ? d.home.didItFor : 0);
+  }, 0);
+  const cleanupSum = days14.reduce((sum,k)=>{
+    const d=state.days[k];
+    return sum + ((d&&d.home&&typeof d.home.myCleanup==="number") ? d.home.myCleanup : 0);
+  }, 0);
+
+  const stoppedEntries = Object.keys(state.days)
+    .filter(k=>{ const d=state.days[k]; return d && d.home && (d.home.stoppedDoing||"").trim(); })
+    .sort().reverse();
+  const stoppedHtml = stoppedEntries.length
+    ? stoppedEntries.map(k=>`<div class="stopped-row"><span class="stopped-date">${shortLabel(k)}</span> — ${esc(state.days[k].home.stoppedDoing)}</div>`).join("")
+    : `<p class="muted">لم تُكتب ملاحظات بعد.</p>`;
+
+  return `
+    <div class="card">
+      <h3>🕊️ انسحابي</h3>
+      <div class="section-title" style="margin-top:0">تدخّلتُ قبل أن يحاول</div>
+      ${barChart(interfered, labels, "#7A4A63", "")}
+      <div class="muted" style="margin-top:4px">الاتجاه النازل هو النجاح.</div>
+      <div class="pattern-line" style="margin-top:12px">فعلتُها عنهم: ${didItForSum} مرة في ١٤ يوماً</div>
+      <div class="pattern-line">أصلحتُ بعدهم: ${fmtDuration(cleanupSum)}</div>
+      <div class="section-title">ما الذي كففتُ عن فعله عنهم</div>
+      ${stoppedHtml}
+    </div>
+  `;
+}
+/* بطاقة «سلّم المهارات» — كل مهارة ودرجتها، وعدد الدرجات المكتسبة هذا الشهر */
+function buildLadderStatsHtml(){
+  const ladder=loadLadder();
+  if(!ladder.length) return "";
+  const sorted=ladder.slice().sort((a,b)=>b.level-a.level);
+  const rowsHtml=sorted.map(s=>{
+    const lastUpLabel = s.lastUp ? shortLabel(s.lastUp) : "—";
+    return `<div class="ladder-stat-row">
+      <span>${esc(s.name)} — ${esc(s.kid)}</span>
+      <span class="muted">درجة ${s.level} · آخر صعود: ${lastUpLabel}</span>
+    </div>`;
+  }).join("");
+  const thisMonth=todayKey();
+  const upCount = ladder.reduce((sum,s)=>sum + s.history.filter(d=>isSameMonth(d, thisMonth)).length, 0);
+  return `
+    <div class="card">
+      <h3>🧗 سلّم المهارات</h3>
       ${rowsHtml}
-      ${bestLine}
-      ${hardestLine}
-      ${delayLine}
-      ${cleanupLine}
+      <div class="pattern-line" style="margin-top:10px">صعدتِ ${upCount} ${upCount===1?"درجة":"درجات"} هذا الشهر</div>
     </div>
   `;
 }
@@ -2778,7 +3844,13 @@ function renderProgress(){
     </div>
     ${buildPatternsHtml()}
     ${buildPrayerStatsHtml()}
-    ${buildRespStatsHtml()}
+    ${buildKidsGrowthHtml()}
+    ${buildKidsNextStepHtml()}
+    ${buildTouchStatsHtml()}
+    ${buildWithdrawalHtml()}
+    ${buildLadderStatsHtml()}
+    ${buildTomorrowStatsHtml()}
+    ${buildSkinStatsHtml()}
     ${buildKinStatsHtml()}
     <div class="card">
       <h3>📊 آخر ١٤ يوماً</h3>
@@ -2858,7 +3930,7 @@ function buildKinManageHtml(){
       </div>
       <div class="row" style="margin:0">
         <button class="btn ghost small" data-action="kinEditStart" data-id="${item.id}">تعديل</button>
-        <button class="kg-del" data-action="kinDelete" data-id="${item.id}" title="حذف">✕</button>
+        ${deleteButtonHtml("kinDelete", item.id)}
       </div>
     </div>`;
   }).join("");
@@ -3008,10 +4080,86 @@ function buildActiveGoalsListHtml(){
   return {activeCount, totalGoals, html};
 }
 
-function renderGoals(){
-  if(icsTimeDraft){ view.innerHTML = buildIcsPickerHtml(); return; }
-  if(showWeekly){ view.innerHTML = buildWeeklyHtml(); return; }
+/* قائمة «أهدافي» الرئيسية — سبعة أسطر فقط، كل سطر يفتح صفحته الخاصة */
+const GOALS_MENU = [
+  {id:"daily",  icon:"🎯", title:"أهدافي اليومية", desc:"تشغيل وأيام"},
+  {id:"tasks",  icon:"📋", title:"مهامّي",         desc:"لمرة واحدة"},
+  {id:"kin",    icon:"📞", title:"صلة الرحم",      desc:"أسبوعي وشهري"},
+  {id:"food",   icon:"🍎", title:"غذائي",          desc:"بروتين وسعرات"},
+  {id:"skin",   icon:"✨", title:"بشرتي",          desc:"الروتين والتدرّج"},
+  {id:"guides", icon:"📚", title:"أدلّتي",         desc:"الملفات"},
+  {id:"data",   icon:"⚙️", title:"بياناتي",        desc:"تصدير واستيراد ومنبّهات الأسبوع"}
+];
+const GOALS_PAGE_TITLES = Object.fromEntries(GOALS_MENU.map(m=>[m.id, m.title]));
+let goalsPage = null; // null = القائمة الرئيسية؛ وإلا أحد معرّفات GOALS_MENU
+let openGoalSphere = {}; // لصفحة «أهدافي اليومية»: مفتاح الصعيد ← مفتوح أم لا
 
+function buildGoalsMenuHtml(){
+  const dailyCount = state.goals.filter(g=>g.active).length;
+  const tasksCount = loadItems().filter(it=>it.o==="me" && !it.d).length;
+  const kinCount = loadKin().length;
+  const countText = {daily:`${dailyCount} شغّالاً`, tasks:`${tasksCount} معلّقة`, kin:`${kinCount}`};
+  const rowsHtml = GOALS_MENU.map(m=>`
+    <div class="goals-menu-row" data-action="goalsPageOpen" data-page="${m.id}">
+      <span class="goals-menu-icon">${m.icon}</span>
+      <span class="goals-menu-text">
+        <span class="goals-menu-title">${esc(m.title)}</span>
+        <span class="muted"> — ${esc(m.desc)}${countText[m.id]?` (${countText[m.id]})`:""}</span>
+      </span>
+      <span class="goals-menu-arrow">‹</span>
+    </div>
+  `).join("");
+  return `<div class="card goals-menu-card">${rowsHtml}</div>`;
+}
+
+/* صفحة «أهدافي اليومية» — مقسّمة على الأصعدة الفعلية المستعملة في شاشة اليوم */
+function buildDailyGoalsPageHtml(){
+  const spheresHtml = SPHERES.map(s=>{
+    const goals = state.goals.filter(g=>s.categories.includes(g.category));
+    const activeInSphere = goals.filter(g=>g.active).length;
+    const isOpen = !!openGoalSphere[s.key];
+    const rowsHtml = goals.map(g=>{
+      const daysRow = g.active ? `<div class="days">${ALL_DAYS.map(di=>
+        `<button class="day ${g.days.includes(di)?"on":""}" data-action="goalDay" data-id="${g.id}" data-day="${di}">${DAY_SHORT[di]}</button>`
+      ).join("")}</div>` : "";
+      return `<div class="goal-row">
+        <div class="goal-row-top">
+          <span class="goal-name ${g.active?"on":""}">${esc(g.name)}</span>
+          <button class="toggle ${g.active?"on":""}" data-action="goalToggle" data-id="${g.id}" role="switch" aria-checked="${g.active}"><span class="knob"></span></button>
+        </div>
+        ${daysRow}
+      </div>`;
+    }).join("");
+    return `<div class="card">
+      <div class="goal-sphere-head" data-action="goalSphereToggle" data-sphere="${s.key}">
+        <span>${esc(s.name)}</span>
+        <span class="muted">${activeInSphere} من ${goals.length} شغّالة</span>
+        <span class="kid-detail-arrow">${isOpen?"▲":"▼"}</span>
+      </div>
+      ${isOpen?rowsHtml:""}
+    </div>`;
+  }).join("");
+
+  return `
+    <div class="card">
+      <div class="row">
+        <button class="btn ghost small" data-action="goalsDisableAll">أطفئي الكل</button>
+        <button class="btn ghost small" data-action="goalsResetDefault">أعيدي الافتراضي</button>
+      </div>
+    </div>
+    ${spheresHtml}
+    <div class="card">
+      <h3 style="margin-top:0">➕ إضافة هدف مخصّص</h3>
+      <label class="fld" style="margin-top:0">اسم الهدف</label>
+      <input type="text" id="customName" placeholder="اكتبي اسم الهدف">
+      <label class="fld">الفئة</label>
+      <select id="customCat">${CAT_ORDER.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("")}</select>
+      <div style="margin-top:12px"><button class="btn" data-action="addCustom">أضيفي الهدف</button></div>
+    </div>
+  `;
+}
+
+function buildTasksPageHtml(){
   const myTasks=loadItems().filter(it=>it.o==="me");
   const myPending=myTasks.filter(it=>!it.d);
   const myDone=myTasks.filter(it=>it.d).sort((a,b)=>(b.dt||"").localeCompare(a.dt||""));
@@ -3019,16 +4167,53 @@ function renderGoals(){
     <div class="kg-item" data-action="kgDone" data-id="${it.id}">
       <div class="kg-chk"></div>
       <div class="kg-text">${esc(it.x)}</div>
-      <button class="kg-del" data-action="kgDel" data-id="${it.id}" title="حذف">✕</button>
+      ${deleteButtonHtml("kgDel", it.id)}
     </div>`).join("") : `<div class="kg-empty">لا توجد مهامّ معلّقة.</div>`;
   const myDoneHtml = myDone.length ? myDone.map(it=>`
     <div class="kg-item done">
       <div class="kg-chk">✓</div>
       <div class="kg-text">${esc(it.x)}</div>
-      <button class="kg-del" data-action="kgDel" data-id="${it.id}" title="حذف">✕</button>
+      ${deleteButtonHtml("kgDel", it.id)}
     </div>`).join("") : `<div class="kg-empty">لا توجد مهامّ منجَزة بعد.</div>`;
+  return `
+    <div class="card">
+      <div class="row" data-me-row="1">
+        <input type="text" placeholder="مهمة جديدة (موعد، ورقة، مكالمة...)">
+        <button class="btn small grow0" data-action="meTaskAdd">إضافة</button>
+      </div>
+      <div class="kg-list" style="margin-top:12px">${myPendingHtml}</div>
+      <div class="section-title">أُنجزت</div>
+      <div class="kg-list">${myDoneHtml}</div>
+    </div>
+  `;
+}
 
-  // إعدادات الصلاة
+function buildKinPageHtml(){ return buildKinManageHtml(); }
+
+function buildFoodTargetsPageHtml(){
+  return `
+    <div class="card">
+      <h3 style="margin-top:0">💪 هدف البروتين والسعرات اليومي</h3>
+      <label class="fld" style="margin-top:0">البروتين (غرام)</label>
+      <input type="number" id="protTargetInput" value="${state.proteinTarget}" inputmode="numeric">
+      <label class="fld">السعرات</label>
+      <input type="number" id="calTargetInput" value="${state.calorieTarget}" inputmode="numeric">
+      <div style="margin-top:12px"><button class="btn small" data-action="saveTargets">حفظ</button></div>
+    </div>
+  `;
+}
+
+function buildGuidesPageHtml(){
+  return `
+    <div class="card">
+      ${GUIDES.map(g=>`<a class="btn ghost guide-link" href="${esc(g.file)}" target="_blank" rel="noopener">${esc(g.title)}</a>`).join("")}
+    </div>
+  `;
+}
+
+/* صفحة «بياناتي» — تجمع: التصدير/الاستيراد، منبّهات الأسبوع، إعدادات الصلاة، وإخفاء النتائج، وأرشيف الملاحظات
+   (هذه الوظائف لم تكن مذكورة صراحة في وصف السطر المختصر، لكنها بقيت محفوظة كاملة هنا بلا حذف) */
+function buildDataPageHtml(){
   const PR=state.prayer;
   const prayerAdjustHtml = PRAYER_ORDER.map(k=>`
     <div class="prayer-adjust-item">
@@ -3043,34 +4228,7 @@ function renderGoals(){
       `).join("")}
     </div>` : "";
 
-  // قائمة واحدة موحّدة لكل الأهداف، مقسّمة إلى المجموعات الستّ
-  const {activeCount, totalGoals, html:goalsHtml} = buildActiveGoalsListHtml();
-
-  view.innerHTML = `
-    <div class="card">
-      <div class="row" style="align-items:center; margin:0">
-        <h3 style="margin:0; flex:1">🎯 أهدافي</h3>
-        <button class="btn ghost small grow0" data-action="openWeekly">أسبوعي 📅</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>✅ مهامّي — لمرة واحدة</h3>
-      <div class="row" data-me-row="1">
-        <input type="text" placeholder="مهمة جديدة (موعد، ورقة، مكالمة...)">
-        <button class="btn small grow0" data-action="meTaskAdd">إضافة</button>
-      </div>
-      <div class="kg-list" style="margin-top:12px">${myPendingHtml}</div>
-      <div class="section-title">أُنجزت</div>
-      <div class="kg-list">${myDoneHtml}</div>
-    </div>
-
-    <div class="card">
-      <h3>🎯 أهدافي</h3>
-      <div class="goal-summary">${activeCount} هدفاً شغّالاً من ${totalGoals}</div>
-      ${goalsHtml}
-    </div>
-
+  return `
     <div class="card">
       <div class="goal-row-top">
         <span class="goal-name ${state.settings.hideResults?"on":""}">أخفِ نتائجي حتى أُكمل ١٤ يوماً</span>
@@ -3078,20 +4236,22 @@ function renderGoals(){
       </div>
     </div>
 
-    ${buildKinManageHtml()}
-
     <div class="card">
-      <h3>📚 أدلّتي</h3>
-      ${GUIDES.map(g=>`<a class="btn ghost guide-link" href="${esc(g.file)}" target="_blank" rel="noopener">${esc(g.title)}</a>`).join("")}
+      <h3 style="margin-top:0">📅 منبّهات الأسبوع والتقويم</h3>
+      <p class="muted">خطّطي أسبوعك وصدّري كل منبّهاته دفعة واحدة.</p>
+      <button class="btn small" data-action="openWeekly">أسبوعي 📅</button>
+      <p class="muted" style="margin-top:14px">أو صدّري أهدافك الشغّالة فقط كأحداث أسبوعية متكرّرة، مع تنبيه قبل الموعد بخمس دقائق.</p>
+      <button class="btn ghost small" data-action="icsExportStart">تصدير التذكيرات إلى تقويم هاتفي</button>
     </div>
 
     <div class="card">
-      <h3>➕ إضافة هدف مخصّص</h3>
-      <label class="fld" style="margin-top:0">اسم الهدف</label>
-      <input type="text" id="customName" placeholder="اكتبي اسم الهدف">
-      <label class="fld">الفئة</label>
-      <select id="customCat">${CAT_ORDER.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("")}</select>
-      <div style="margin-top:12px"><button class="btn" data-action="addCustom">أضيفي الهدف</button></div>
+      <h3>💾 نسخة احتياطية</h3>
+      <p class="muted">صدّري كل بياناتك (الأهداف، الوجبات، الوصفات، أهداف الأولاد...) في ملف واحد، أو استعيديها من نسخة سابقة.</p>
+      <div class="row">
+        <button class="btn small" data-action="exportData">⬇️ تصدير بياناتي</button>
+        <button class="btn ghost small" data-action="importDataTrigger">⬆️ استيراد</button>
+      </div>
+      <input type="file" accept="application/json" id="importFileInput" data-action="importFile" style="display:none">
     </div>
 
     <div class="card">
@@ -3115,31 +4275,39 @@ function renderGoals(){
       ${prayerManualHtml}
     </div>
 
-    <div class="card">
-      <h3>💪 هدف البروتين والسعرات اليومي</h3>
-      <label class="fld" style="margin-top:0">البروتين (غرام)</label>
-      <input type="number" id="protTargetInput" value="${state.proteinTarget}" inputmode="numeric">
-      <label class="fld">السعرات</label>
-      <input type="number" id="calTargetInput" value="${state.calorieTarget}" inputmode="numeric">
-      <div style="margin-top:12px"><button class="btn small" data-action="saveTargets">حفظ</button></div>
-    </div>
-
-    <div class="card">
-      <h3>📅 تذكيرات التقويم</h3>
-      <p class="muted">صدّري أهدافك الشغّالة كأحداث أسبوعية متكرّرة في تقويم هاتفك، مع تنبيه قبل الموعد بخمس دقائق.</p>
-      <button class="btn small" data-action="icsExportStart">تصدير التذكيرات إلى تقويم هاتفي</button>
-    </div>
-
-    <div class="card">
-      <h3>💾 نسخة احتياطية</h3>
-      <p class="muted">صدّري كل بياناتك (الأهداف، الوجبات، الوصفات، أهداف الأولاد...) في ملف واحد، أو استعيديها من نسخة سابقة.</p>
-      <div class="row">
-        <button class="btn small" data-action="exportData">⬇️ تصدير بياناتي</button>
-        <button class="btn ghost small" data-action="importDataTrigger">⬆️ استيراد</button>
-      </div>
-      <input type="file" accept="application/json" id="importFileInput" data-action="importFile" style="display:none">
-    </div>
+    ${buildCatchArchiveHtml()}
   `;
+}
+
+function buildGoalsPageHtml(page){
+  const builders = {
+    daily: buildDailyGoalsPageHtml,
+    tasks: buildTasksPageHtml,
+    kin: buildKinPageHtml,
+    food: buildFoodTargetsPageHtml,
+    skin: buildSkinSettingsHtml,
+    guides: buildGuidesPageHtml,
+    data: buildDataPageHtml
+  };
+  const title = GOALS_PAGE_TITLES[page] || "";
+  const inner = (builders[page] || (()=>""))();
+  return `
+    <div class="card goals-page-head">
+      <div class="row" style="align-items:center; margin:0">
+        <button class="btn ghost small grow0" data-action="goalsPageClose">‹ رجوع</button>
+        <h3 style="margin:0; flex:1; text-align:center">${esc(title)}</h3>
+        <span style="width:56px; flex:0 0 auto"></span>
+      </div>
+    </div>
+    ${inner}
+  `;
+}
+
+function renderGoals(){
+  if(icsTimeDraft){ view.innerHTML = buildIcsPickerHtml(); return; }
+  if(showWeekly){ view.innerHTML = buildWeeklyHtml(); return; }
+  if(!goalsPage){ view.innerHTML = buildGoalsMenuHtml(); return; }
+  view.innerHTML = buildGoalsPageHtml(goalsPage);
 }
 
 /* ============ معالجة الأحداث ============ */
@@ -3168,6 +4336,28 @@ view.addEventListener("click", e=>{
     const k=el.dataset.sphere;
     openSphere = openSphere===k ? null : k;
     renderCurrent();
+  }
+  else if(a==="goalsPageOpen"){ goalsPage=el.dataset.page; renderCurrent(); }
+  else if(a==="goalsPageClose"){ goalsPage=null; renderCurrent(); }
+  else if(a==="goalSphereToggle"){
+    const k=el.dataset.sphere;
+    openGoalSphere[k]=!openGoalSphere[k];
+    renderCurrent();
+  }
+  else if(a==="goalsDisableAll"){
+    if(!confirm("سيُطفأ كل الأهداف الشغّالة الآن. متابعة؟")) return;
+    state.goals.forEach(g=>{ g.active=false; });
+    save(); renderCurrent();
+  }
+  else if(a==="goalsResetDefault"){
+    if(!confirm("ستُعاد كل الأهداف إلى حالتها الافتراضية (الأصلية شغّالة بأيامها المعتادة، والبقية مطفأة). متابعة؟")) return;
+    const defaultNames=new Set(DEFAULT_GOALS.map(g=>g[0]));
+    state.goals.forEach(g=>{
+      const bankEntry=BANK.find(b=>b.name===g.name);
+      g.active=defaultNames.has(g.name);
+      if(bankEntry) g.days=bankEntry.days.slice();
+    });
+    save(); renderCurrent();
   }
   else if(a==="prayerToggleExpand"){ prayerExpanded=!prayerExpanded; renderCurrent(); }
   else if(a==="prayerStatusCycle"){
@@ -3238,7 +4428,9 @@ view.addEventListener("click", e=>{
     saveKin(list); kinDraft=null; renderCurrent();
   }
   else if(a==="kinDelete"){
-    saveKin(loadKin().filter(x=>x.id!==el.dataset.id));
+    if(!requestDeleteConfirm(el.dataset.id)) return;
+    deleteConfirmId=null; clearTimeout(deleteConfirmTimer);
+    saveKin(loadKin().filter(x=>String(x.id)!==String(el.dataset.id)));
     renderCurrent();
   }
   else if(a==="toggleTasksPanel"){ showTasksPanel=!showTasksPanel; renderCurrent(); }
@@ -3278,6 +4470,44 @@ view.addEventListener("click", e=>{
   else if(a==="waterDec"){ const day=getDay(key); day.water=Math.max(0,day.water-1); save(); renderCurrent(); }
   else if(a==="exToggle"){ const day=getDay(key); day.exercise.done=!day.exercise.done; save(); renderCurrent(); }
   else if(a==="bodySubTab"){ bodySubTab=el.dataset.sub; renderCurrent(); }
+  else if(a==="skinStepToggle"){
+    const day=getDay(key); const group=el.dataset.group;
+    if(group==="body") day.skin.body=!day.skin.body;
+    else day.skin[group][el.dataset.step]=!day.skin[group][el.dataset.step];
+    save(); renderCurrent();
+  }
+  else if(a==="skinEyePatchToggle"){
+    const day=getDay(key); day.skin.eyePatch=!day.skin.eyePatch;
+    save(); renderCurrent();
+  }
+  else if(a==="skinIrritationAnswer"){
+    const s=skinSettings();
+    s.weeklyIrritation[el.dataset.week]=el.dataset.val==="true";
+    saveSkinSettings(s); renderCurrent();
+  }
+  else if(a==="skinIncreaseNights"){
+    const s=skinSettings();
+    if(!s.retinalDays.includes(3)) s.retinalDays.push(3); // الأربعاء — الثلاثاء محجوز لليزر
+    s.nightsPerWeek=s.retinalDays.length;
+    s.lastIncrease=todayKey();
+    saveSkinSettings(s); renderCurrent();
+  }
+  else if(a==="skinDecreaseNights"){
+    const s=skinSettings();
+    if(s.retinalDays.length>1) s.retinalDays.pop();
+    s.nightsPerWeek=s.retinalDays.length;
+    saveSkinSettings(s); renderCurrent();
+  }
+  else if(a==="skinPhotoTrigger"){
+    const inp=document.getElementById("skinPhotoInput"); if(inp) inp.click();
+  }
+  else if(a==="skinRetinalDayToggle"){
+    const s=skinSettings(); const d=+el.dataset.day;
+    if(s.retinalDays.includes(d)) s.retinalDays=s.retinalDays.filter(x=>x!==d);
+    else s.retinalDays.push(d);
+    s.nightsPerWeek=s.retinalDays.length;
+    saveSkinSettings(s); renderCurrent();
+  }
   else if(a==="recipeNew"){
     recipeDraft={id:null, name:"", link:"", image:null, servings:4,
       ingredients:[{qty:"",unit:"غرام",name:""}], method:"", note:"", liked:false};
@@ -3421,6 +4651,144 @@ view.addEventListener("click", e=>{
     if(!list.includes("سارة")) list.push("سارة");
     save(); renderCurrent();
   }
+  else if(a==="respRowAll"){
+    const day=getDay(key); const kid=el.dataset.kid;
+    day.resp[kid]=day.resp[kid]||{};
+    RESPONSIBILITIES.forEach(r=>{ day.resp[kid][r.id]="alone"; });
+    save(); renderCurrent();
+  }
+  else if(a==="touchToggle"){
+    const day=getDay(key); const kid=el.dataset.kid, m=el.dataset.moment;
+    day.kids[kid].touch[m]=!day.kids[kid].touch[m];
+    save(); renderCurrent();
+  }
+  else if(a==="touchColumnFill"){
+    const day=getDay(key); const m=el.dataset.moment;
+    const school=goesToSchoolSettings();
+    const momentDef=TOUCH_MOMENTS.find(x=>x.id===m);
+    KIDS.forEach(name=>{
+      if(momentDef.schoolOnly && !school[name]) return;
+      day.kids[name].touch[m]=true;
+    });
+    save(); renderCurrent();
+  }
+  else if(a==="goesToSchoolToggle"){
+    const school=goesToSchoolSettings();
+    school[el.dataset.kid]=!school[el.dataset.kid];
+    save(); renderCurrent();
+  }
+  else if(a==="respCopyYesterday"){
+    const day=getDay(key);
+    if(respRecordedToday(day) && !confirm("سيُستبدَل ما سجّلتِه اليوم بجدول الأمس. متابعة؟")) return;
+    const yesterday=new Date(key+"T00:00:00"); yesterday.setDate(yesterday.getDate()-1);
+    const yDay=state.days[fmt(yesterday)];
+    day.resp = (yDay && yDay.resp) ? JSON.parse(JSON.stringify(yDay.resp)) : {};
+    save(); renderCurrent();
+  }
+  else if(a==="respClearToday"){
+    const day=getDay(key);
+    if(!respRecordedToday(day)) return;
+    if(!confirm("سيُفرَغ جدول اليوم بالكامل. متابعة؟")) return;
+    day.resp={};
+    save(); renderCurrent();
+  }
+  else if(a==="toggleKidDetail"){
+    openKidDetail[el.dataset.kid]=!openKidDetail[el.dataset.kid];
+    renderCurrent();
+  }
+  else if(a==="exportKidsCSV"){ exportKidsRespCSV(); }
+  else if(a==="ladderUp"){
+    const list=loadLadder(); const s=list.find(x=>x.id===el.dataset.id); if(!s) return;
+    if(s.level<5){
+      if(ladderDaysOnLevel(s)<3) alert("٣ أيام ناجحة على الأقل قبل الصعود");
+      s.level++;
+      const t=todayKey();
+      s.lastUp=t;
+      s.history.push(t);
+    }
+    saveLadder(list); renderCurrent();
+  }
+  else if(a==="ladderDown"){
+    const list=loadLadder(); const s=list.find(x=>x.id===el.dataset.id); if(!s) return;
+    if(s.level>1) s.level--;
+    saveLadder(list); renderCurrent();
+  }
+  else if(a==="ladderAddStart"){ ladderDraft={name:"", kid:KIDS[0], level:1}; renderCurrent(); }
+  else if(a==="ladderDraftCancel"){ ladderDraft=null; renderCurrent(); }
+  else if(a==="ladderDraftSave"){
+    if(!ladderDraft) return;
+    const name=(ladderDraft.name||"").trim();
+    if(!name){ alert("اكتبي اسم المهارة أولاً."); return; }
+    const list=loadLadder();
+    list.push({id:genId(), name, kid:ladderDraft.kid, level:+ladderDraft.level, lastUp:null, createdAt:todayKey(), history:[]});
+    saveLadder(list);
+    ladderDraft=null;
+    renderCurrent();
+  }
+  else if(a==="homeCounter"){
+    const day=getDay(key);
+    const field=el.dataset.field, v=+el.dataset.val;
+    day.home[field] = day.home[field]===v ? null : v;
+    save(); renderCurrent();
+  }
+  else if(a==="tomorrowTogglePicker"){ tomorrowPickerOpen=!tomorrowPickerOpen; renderCurrent(); }
+  else if(a==="tomorrowPickItem"){
+    const store=loadTomorrow();
+    const items=ensureTomorrowSlot(store, tomorrowKey());
+    const emptyIdx=items.findIndex(x=>!x.t.trim());
+    if(emptyIdx===-1) return; // لا خانة فارغة لاستقبال المهمّة
+    items[emptyIdx]={t:el.dataset.text, done:false, moved:0};
+    saveTomorrow(store);
+    tomorrowPickerOpen=false;
+    renderCurrent();
+  }
+  else if(a==="tomorrowToggleDone"){
+    const store=loadTomorrow();
+    const items=store[todayKey()]; if(!items) return;
+    const idx=+el.dataset.idx;
+    items[idx].done=!items[idx].done;
+    saveTomorrow(store); renderCurrent();
+  }
+  else if(a==="tomorrowMove"){
+    const store=loadTomorrow();
+    const todayItems=store[todayKey()]; if(!todayItems) return;
+    const idx=+el.dataset.idx;
+    const item=todayItems[idx]; if(!item||!item.t.trim()) return;
+    const tomorrowItems=ensureTomorrowSlot(store, tomorrowKey());
+    const emptyIdx=tomorrowItems.findIndex(x=>!x.t.trim());
+    if(emptyIdx===-1) return; // قائمة الغد ممتلئة بالفعل
+    tomorrowItems[emptyIdx]={t:item.t, done:false, moved:item.moved+1};
+    todayItems[idx]={t:"", done:false, moved:0};
+    saveTomorrow(store); renderCurrent();
+  }
+  else if(a==="tomorrowStrike"){
+    const store=loadTomorrow();
+    const todayItems=store[todayKey()]; if(!todayItems) return;
+    const idx=+el.dataset.idx;
+    todayItems[idx]={t:"", done:false, moved:0};
+    saveTomorrow(store); renderCurrent();
+  }
+  else if(a==="catchDone"){
+    const list=loadCatch(); const c=list.find(x=>x.id===el.dataset.id); if(!c) return;
+    c.done=true; c.archived=true;
+    saveCatch(list); renderCurrent();
+  }
+  else if(a==="catchDefer"){
+    const list=loadCatch(); const c=list.find(x=>x.id===el.dataset.id); if(!c) return;
+    c.when=catchNextWhen(c.when); c.moved=(c.moved||0)+1;
+    saveCatch(list); renderCurrent();
+  }
+  else if(a==="catchDismiss"){
+    const list=loadCatch(); const c=list.find(x=>x.id===el.dataset.id); if(!c) return;
+    c.archived=true;
+    saveCatch(list); renderCurrent();
+  }
+  else if(a==="catchArchiveToggle"){ catchArchiveOpen=!catchArchiveOpen; renderCurrent(); }
+  else if(a==="catchArchiveClear"){
+    if(!confirm("سيُحذف كل الملاحظات المؤرشفة نهائياً. متابعة؟")) return;
+    saveCatch(loadCatch().filter(c=>!c.archived));
+    renderCurrent();
+  }
   else if(a==="nightClose"){
     getDay(key).night=true; save();
     nightFarewell=true; renderCurrent();
@@ -3487,11 +4855,13 @@ view.addEventListener("click", e=>{
     saveItems(items); renderCurrent();
   }
   else if(a==="kgDone"){
-    const items=loadItems(); const it=items.find(x=>x.id===el.dataset.id);
+    const items=loadItems(); const it=items.find(x=>String(x.id)===String(el.dataset.id));
     if(it){ it.d=true; it.dt=new Date().toISOString(); saveItems(items); renderCurrent(); }
   }
   else if(a==="kgDel"){
-    const items=loadItems().filter(x=>x.id!==el.dataset.id);
+    if(!requestDeleteConfirm(el.dataset.id)) return;
+    deleteConfirmId=null; clearTimeout(deleteConfirmTimer);
+    const items=loadItems().filter(x=>String(x.id)!==String(el.dataset.id));
     saveItems(items); renderCurrent();
   }
   else if(a==="goalDay"){
@@ -3570,6 +4940,7 @@ view.addEventListener("input", e=>{
   else if(a==="exSteps"){ getDay(key).exercise.steps=+el.value||0; save(); }
   else if(a==="kidWhat"){ getDay(key).kids[el.dataset.kid].what=el.value; save(); }
   else if(a==="kidNext"){ getDay(key).kids[el.dataset.kid].next=el.value; save(); }
+  else if(a==="kidNote"){ getDay(key).kids[el.dataset.kid].note=el.value; save(); }
   else if(a==="homeThreatWhat"){ getDay(key).home.threatWhat=el.value; save(); }
   else if(a==="homeWhyNot"){ getDay(key).home.whyNot=el.value; save(); }
   else if(a==="authorityField"){ getDay(key).home.authority[el.dataset.field]=el.value; save(); }
@@ -3628,6 +4999,17 @@ view.addEventListener("input", e=>{
     if(!kinDraft) return;
     kinDraft[el.dataset.field]=el.value;
   }
+  else if(a==="ladderDraftField"){
+    if(!ladderDraft) return;
+    ladderDraft[el.dataset.field]=el.value;
+  }
+  else if(a==="stoppedDoing"){ getDay(key).home.stoppedDoing=el.value; save(); }
+  else if(a==="tomorrowField"){
+    const store=loadTomorrow();
+    const items=ensureTomorrowSlot(store, tomorrowKey());
+    items[+el.dataset.idx].t=el.value;
+    saveTomorrow(store);
+  }
   else if(a==="weeklyPrayerBefore"){
     weeklySettings().prayerBefore=+el.value||0; save();
   }
@@ -3636,8 +5018,23 @@ view.addEventListener("input", e=>{
   }
 });
 
-/* اختيار صورة الوصفة: تصغير عبر canvas قبل الحفظ */
+/* اختيار صورة الوصفة أو صورة تتبّع البشرة: تصغير عبر canvas قبل الحفظ */
 view.addEventListener("change", e=>{
+  const skinImgEl=e.target.closest("[data-action='skinPhotoUpload']");
+  if(skinImgEl){
+    const file=skinImgEl.files&&skinImgEl.files[0]; if(!file) return;
+    resizeImageFile(file, 400, 0.6).then(dataUrl=>{
+      const photos=loadSkinPhotos();
+      photos.push({id:genId(), dataUrl, date:todayKey()});
+      saveSkinPhotos(photos);
+      skinImgEl.value="";
+      renderCurrent();
+    }).catch(err=>{
+      console.warn(err);
+      alert("تعذّر معالجة هذه الصورة. جرّبي صورة أخرى.");
+    });
+    return;
+  }
   const imgEl=e.target.closest("[data-action='recipeImage']");
   if(imgEl){
     const file=imgEl.files&&imgEl.files[0]; if(!file||!recipeDraft) return;
@@ -3679,13 +5076,34 @@ view.addEventListener("change", e=>{
   }
 });
 
+/* تلميح رؤوس أعمدة جدول المسؤوليات بالضغط المطوّل (نصف ثانية) */
+function respTipStart(el){
+  clearTimeout(respTipTimer);
+  respTipTimer=setTimeout(()=>{
+    respTipActive=el.dataset.tip;
+    renderCurrent();
+    clearTimeout(respTipTimer);
+    respTipTimer=setTimeout(()=>{ respTipActive=null; renderCurrent(); }, 2000);
+  }, 500);
+}
+function respTipCancel(){ clearTimeout(respTipTimer); }
+
+view.addEventListener("touchstart", e=>{
+  const el=e.target.closest("[data-tip]"); if(el) respTipStart(el);
+}, {passive:true});
+view.addEventListener("touchend", respTipCancel);
+view.addEventListener("mousedown", e=>{
+  const el=e.target.closest("[data-tip]"); if(el) respTipStart(el);
+});
+view.addEventListener("mouseup", respTipCancel);
+
 function setStatus(id,msg,cls){
   const el=document.getElementById(id); if(!el) return;
   el.textContent=msg; el.className="status "+(cls||"");
 }
 
 /* ---- تصدير واستيراد كل بيانات التطبيق ---- */
-const APP_STORAGE_KEYS = [STORAGE_KEY, MY_FOODS_KEY, ITEMS_KEY, RECIPES_KEY, MY_INGS_KEY, KIN_KEY, TIMES_KEY];
+const APP_STORAGE_KEYS = [STORAGE_KEY, MY_FOODS_KEY, ITEMS_KEY, RECIPES_KEY, MY_INGS_KEY, KIN_KEY, TIMES_KEY, LADDER_KEY, TOMORROW_KEY, CATCH_KEY, SKIN_KEY, SKIN_PHOTOS_KEY];
 function exportAllData(){
   const data={};
   APP_STORAGE_KEYS.forEach(k=>{
@@ -3726,6 +5144,37 @@ function importAllData(file){
 document.getElementById("tabs").addEventListener("click", e=>{
   const b=e.target.closest("button[data-tab]"); if(!b) return;
   currentTab=b.dataset.tab; renderCurrent();
+});
+
+/* الالتقاط السريع — زرّ عائم وشاشته الخاصة، خارج #view فيبقى ثابتاً في كل التبويبات */
+document.getElementById("fabCatch").addEventListener("click", ()=>{
+  catchDraft={text:"", kid:null, when:"dinner"};
+  catchSheetOpen=true;
+  renderCatchSheet();
+  setTimeout(()=>{ const el=document.getElementById("catchTextInput"); if(el) el.focus(); }, 0);
+});
+document.getElementById("catchSheetSlot").addEventListener("click", e=>{
+  const el=e.target.closest("[data-action]"); if(!el) return;
+  const a=el.dataset.action;
+  if(a==="catchCancel"){ catchSheetOpen=false; catchDraft=null; renderCatchSheet(); }
+  else if(a==="catchKidField"){ catchDraft.kid=el.dataset.val; renderCatchSheet(); }
+  else if(a==="catchWhenField"){ catchDraft.when=el.dataset.val; renderCatchSheet(); }
+  else if(a==="catchSave"){
+    const text=(catchDraft.text||"").trim();
+    if(!text){ alert("اكتبي الملاحظة أولاً."); return; }
+    if(!catchDraft.kid){ alert("اختاري الطفل أولاً."); return; }
+    const list=loadCatch();
+    list.push({id:genId(), text, kid:catchDraft.kid, when:catchDraft.when, created:Date.now(), done:false, moved:0, archived:false});
+    saveCatch(list);
+    catchSheetOpen=false; catchDraft=null;
+    renderCatchSheet();
+    renderCurrent(); // لتحديث بطاقة «للمتابعة معهم» فوراً إن حان وقتها الآن
+  }
+  // catchSheetNoop: لا فعل — يمنع الفقاعة من الوصول لـ catchCancel عند الضغط داخل الشاشة
+});
+document.getElementById("catchSheetSlot").addEventListener("input", e=>{
+  const el=e.target.closest("[data-action='catchTextField']"); if(!el || !catchDraft) return;
+  catchDraft.text=el.value; // بلا رندر أثناء الكتابة حتى لا يفقد الحقل تركيزه
 });
 
 /* البدء — بعد السابعة مساءً تُفتح «ليلتي»، وقبلها «اليوم» كالمعتاد */
