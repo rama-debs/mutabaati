@@ -1,4 +1,4 @@
-const VERSION='1.0.3';
+const VERSION='1.0.4';
 const CACHE='mutabaati-new-'+VERSION;
 const ASSETS=["./", "./index.html", "./duas.js", "./tales.js", "./manifest.json", "./icon.svg", "./icon-192.png", "./icon-512.png", "./laundry.html", "./consequences.html", "./house.html", "./adhkar.html", "./protection.html"];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()))});
